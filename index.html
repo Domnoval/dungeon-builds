@@ -13,44 +13,47 @@ html{scroll-snap-type:y mandatory;overflow-x:hidden;scrollbar-width:none}
 html::-webkit-scrollbar{display:none}
 body{font-family:'Inter',sans-serif;background:var(--black);color:#fff;cursor:none;overflow-x:hidden}
 
-/* Custom cursor */
 .cursor{position:fixed;width:20px;height:20px;border:1px solid var(--gold);border-radius:50%;pointer-events:none;z-index:10000;transition:transform .15s ease,opacity .15s ease;mix-blend-mode:difference;transform:translate(-50%,-50%)}
 .cursor-dot{position:fixed;width:4px;height:4px;background:var(--gold);border-radius:50%;pointer-events:none;z-index:10001;transform:translate(-50%,-50%);transition:transform .05s ease}
 .cursor.hover{transform:translate(-50%,-50%) scale(2.5);border-color:var(--gold-light)}
 @media(hover:none){.cursor,.cursor-dot{display:none}body{cursor:auto}}
 
-/* Grain overlay */
 .grain{position:fixed;top:-50%;left:-50%;width:200%;height:200%;z-index:9998;pointer-events:none;opacity:var(--grain-opacity);background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");animation:grainMove 0.5s steps(1) infinite}
 @keyframes grainMove{0%{transform:translate(0,0)}25%{transform:translate(-5%,5%)}50%{transform:translate(5%,-5%)}75%{transform:translate(-5%,-5%)}100%{transform:translate(5%,5%)}}
 
-/* Sections */
 .section{height:100vh;height:100dvh;width:100vw;scroll-snap-align:start;scroll-snap-stop:always;position:relative;overflow:hidden;display:flex;align-items:center;justify-content:center}
 
-/* Hero */
 .hero{background:var(--black);flex-direction:column;gap:0}
 .hero-title{font-weight:900;font-size:clamp(3rem,10vw,8rem);letter-spacing:0.15em;color:var(--gold);opacity:0;animation:fadeInSlow 3s ease forwards;text-transform:uppercase;text-align:center;line-height:1}
 .hero-sub{font-weight:100;font-size:clamp(0.7rem,1.5vw,1rem);letter-spacing:0.5em;color:var(--gold-light);opacity:0;animation:fadeInSlow 2s 2s ease forwards;text-transform:uppercase;margin-top:1.5rem}
 @keyframes fadeInSlow{to{opacity:1}}
 
-/* Image sections */
+/* Image sections — Ken Burns */
 .img-section{background:var(--black)}
-.img-section .bg{position:absolute;inset:0;background-size:cover;background-position:center;transition:transform 8s cubic-bezier(.19,1,.22,1);will-change:transform}
-.img-section.in-view .bg{transform:scale(1.05)}
+.img-section .bg{position:absolute;inset:0;background-size:cover;background-position:center;background-repeat:no-repeat;will-change:transform;transform:scale(1.08);transition:none}
+@keyframes kenBurnsIn{0%{transform:scale(1.12) translate(1%,1%)}100%{transform:scale(1.0) translate(-0.5%,-0.5%)}}
+@keyframes kenBurnsIn2{0%{transform:scale(1.10) translate(-1%,0.5%)}100%{transform:scale(1.02) translate(0.5%,-0.5%)}}
+@keyframes kenBurnsIn3{0%{transform:scale(1.05) translate(0.5%,-1%)}100%{transform:scale(1.12) translate(-0.5%,0.5%)}}
+.img-section.in-view .bg{animation:kenBurnsIn 12s cubic-bezier(.19,1,.22,1) forwards}
+.img-section.in-view.kb2 .bg{animation:kenBurnsIn2 14s cubic-bezier(.19,1,.22,1) forwards}
+.img-section.in-view.kb3 .bg{animation:kenBurnsIn3 16s cubic-bezier(.19,1,.22,1) forwards}
+
+/* Upload slots */
 .img-section .bg.empty{background:linear-gradient(145deg,#0d0d0d 0%,#1a1a1a 50%,#0d0d0d 100%)}
 .img-section .upload-hint{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;opacity:0;transition:opacity .4s ease;z-index:2}
 .img-section:hover .upload-hint,.img-section.dragging .upload-hint{opacity:1}
 .upload-hint span{font-weight:100;font-size:0.75rem;letter-spacing:0.4em;color:rgba(201,168,76,0.4);text-transform:uppercase;pointer-events:none}
-.img-section .bg.has-image .upload-hint{display:none}
 .img-section input[type="file"]{position:absolute;inset:0;opacity:0;cursor:pointer;z-index:3;width:100%;height:100%}
 
-/* Text interstitials */
+/* Vignette on image sections */
+.img-section .vignette{position:absolute;inset:0;background:radial-gradient(ellipse at center,transparent 50%,rgba(0,0,0,0.5) 100%);pointer-events:none;z-index:1}
+
 .text-section{background:var(--black);flex-direction:column}
 .text-section .text-content{opacity:0;transform:translateY(30px);transition:opacity 1.2s ease,transform 1.2s ease}
 .text-section.in-view .text-content{opacity:1;transform:translateY(0)}
 .text-content h2{font-weight:100;font-size:clamp(1.3rem,4vw,3rem);letter-spacing:0.05em;color:#fff;text-align:center;line-height:1.3;max-width:80vw}
 .text-content h2 em{font-style:normal;color:var(--gold)}
 
-/* CTA */
 .cta-section{background:var(--black);flex-direction:column;gap:2rem}
 .cta-section .text-content{opacity:0;transform:translateY(30px);transition:opacity 1.2s ease,transform 1.2s ease}
 .cta-section.in-view .text-content{opacity:1;transform:translateY(0)}
@@ -58,14 +61,17 @@ body{font-family:'Inter',sans-serif;background:var(--black);color:#fff;cursor:no
 .cta-btn{display:inline-block;margin-top:2rem;padding:1rem 3rem;border:1px solid var(--gold);color:var(--gold);font-family:'Inter',sans-serif;font-weight:300;font-size:0.85rem;letter-spacing:0.3em;text-transform:uppercase;text-decoration:none;transition:all .4s ease;background:transparent}
 .cta-btn:hover{background:var(--gold);color:var(--black)}
 
-/* Scroll progress */
 .progress{position:fixed;top:0;left:0;height:2px;background:var(--gold);z-index:9999;transition:width .1s linear;width:0}
 
-/* Scroll indicator */
 .scroll-indicator{position:fixed;bottom:2rem;left:50%;transform:translateX(-50%);z-index:9999;opacity:0;animation:fadeInSlow 2s 4s ease forwards}
 .scroll-indicator span{display:block;width:1px;height:40px;background:linear-gradient(to bottom,transparent,var(--gold));animation:scrollPulse 2s ease infinite}
 @keyframes scrollPulse{0%,100%{opacity:0.3;transform:scaleY(0.7)}50%{opacity:1;transform:scaleY(1)}}
 .scroll-indicator.hidden{opacity:0!important;transition:opacity .5s ease}
+
+/* Nav dots */
+.nav-dots{position:fixed;right:1.5rem;top:50%;transform:translateY(-50%);z-index:9999;display:flex;flex-direction:column;gap:8px}
+.nav-dots .dot{width:6px;height:6px;border-radius:50%;background:rgba(201,168,76,0.2);transition:all .3s ease;cursor:pointer}
+.nav-dots .dot.active{background:var(--gold);transform:scale(1.4)}
 </style>
 </head>
 <body>
@@ -73,59 +79,81 @@ body{font-family:'Inter',sans-serif;background:var(--black);color:#fff;cursor:no
 <div class="cursor-dot" id="cursorDot"></div>
 <div class="grain"></div>
 <div class="progress" id="progress"></div>
-
 <div class="scroll-indicator" id="scrollInd"><span></span></div>
+<nav class="nav-dots" id="navDots"></nav>
 
 <!-- HERO -->
-<section class="section hero">
+<section class="section hero" data-nav>
 <h1 class="hero-title">Dungeon Builds</h1>
 <p class="hero-sub">Functional art for small spaces</p>
 </section>
 
-<!-- IMAGES 1-3 -->
-<section class="section img-section" data-slot="1"><div class="bg empty"></div><div class="upload-hint"><span>drop image</span></div><input type="file" accept="image/*"></section>
-<section class="section img-section" data-slot="2"><div class="bg empty"></div><div class="upload-hint"><span>drop image</span></div><input type="file" accept="image/*"></section>
-<section class="section img-section" data-slot="3"><div class="bg empty"></div><div class="upload-hint"><span>drop image</span></div><input type="file" accept="image/*"></section>
+<!-- render_05 — Hero image, cyberpunk murphy couch -->
+<section class="section img-section" data-nav>
+<div class="bg" style="background-image:url('images/render_05.png')"></div>
+<div class="vignette"></div>
+</section>
 
-<!-- TEXT 1 -->
-<section class="section text-section"><div class="text-content"><h2>Wall art that <em>works</em>.</h2></div></section>
+<!-- TEXT -->
+<section class="section text-section" data-nav><div class="text-content"><h2>Wall art that <em>works</em>.</h2></div></section>
 
-<!-- IMAGES 4-6 -->
-<section class="section img-section" data-slot="4"><div class="bg empty"></div><div class="upload-hint"><span>drop image</span></div><input type="file" accept="image/*"></section>
-<section class="section img-section" data-slot="5"><div class="bg empty"></div><div class="upload-hint"><span>drop image</span></div><input type="file" accept="image/*"></section>
-<section class="section img-section" data-slot="6"><div class="bg empty"></div><div class="upload-hint"><span>drop image</span></div><input type="file" accept="image/*"></section>
+<!-- render_01 — cognac loveseat -->
+<section class="section img-section kb2" data-nav>
+<div class="bg" style="background-image:url('images/render_01.png')"></div>
+<div class="vignette"></div>
+</section>
 
-<!-- TEXT 2 -->
-<section class="section text-section"><div class="text-content"><h2>Folds flat. Holds <em>everything</em>.</h2></div></section>
+<!-- render_04 — neon bench pink LED -->
+<section class="section img-section kb3" data-nav>
+<div class="bg" style="background-image:url('images/render_04.png')"></div>
+<div class="vignette"></div>
+</section>
 
-<!-- IMAGES 7-9 -->
-<section class="section img-section" data-slot="7"><div class="bg empty"></div><div class="upload-hint"><span>drop image</span></div><input type="file" accept="image/*"></section>
-<section class="section img-section" data-slot="8"><div class="bg empty"></div><div class="upload-hint"><span>drop image</span></div><input type="file" accept="image/*"></section>
-<section class="section img-section" data-slot="9"><div class="bg empty"></div><div class="upload-hint"><span>drop image</span></div><input type="file" accept="image/*"></section>
+<!-- TEXT -->
+<section class="section text-section" data-nav><div class="text-content"><h2>Folds flat. Holds <em>everything</em>.</h2></div></section>
 
-<!-- TEXT 3 -->
-<section class="section text-section"><div class="text-content"><h2>Built from Home Depot.<br>Looks like it cost <em>ten thousand</em>.</h2></div></section>
+<!-- render_02 — red leather industrial bench -->
+<section class="section img-section" data-nav>
+<div class="bg" style="background-image:url('images/render_02.png')"></div>
+<div class="vignette"></div>
+</section>
 
-<!-- IMAGES 10-12 -->
-<section class="section img-section" data-slot="10"><div class="bg empty"></div><div class="upload-hint"><span>drop image</span></div><input type="file" accept="image/*"></section>
-<section class="section img-section" data-slot="11"><div class="bg empty"></div><div class="upload-hint"><span>drop image</span></div><input type="file" accept="image/*"></section>
-<section class="section img-section" data-slot="12"><div class="bg empty"></div><div class="upload-hint"><span>drop image</span></div><input type="file" accept="image/*"></section>
+<!-- render_03 — same style different angle -->
+<section class="section img-section kb2" data-nav>
+<div class="bg" style="background-image:url('images/render_03.png')"></div>
+<div class="vignette"></div>
+</section>
 
-<!-- TEXT 4 -->
-<section class="section text-section"><div class="text-content"><h2>Every piece hides <em>in plain sight</em>.</h2></div></section>
+<!-- TEXT -->
+<section class="section text-section" data-nav><div class="text-content"><h2>Built from Home Depot.<br>Looks like it cost <em>ten thousand</em>.</h2></div></section>
 
-<!-- IMAGES 13-15 -->
-<section class="section img-section" data-slot="13"><div class="bg empty"></div><div class="upload-hint"><span>drop image</span></div><input type="file" accept="image/*"></section>
-<section class="section img-section" data-slot="14"><div class="bg empty"></div><div class="upload-hint"><span>drop image</span></div><input type="file" accept="image/*"></section>
-<section class="section img-section" data-slot="15"><div class="bg empty"></div><div class="upload-hint"><span>drop image</span></div><input type="file" accept="image/*"></section>
+<!-- render_06 — detail shot -->
+<section class="section img-section kb3" data-nav>
+<div class="bg" style="background-image:url('images/render_06.png')"></div>
+<div class="vignette"></div>
+</section>
+
+<!-- render_07 — cognac seat with art panel -->
+<section class="section img-section" data-nav>
+<div class="bg" style="background-image:url('images/render_07.png')"></div>
+<div class="vignette"></div>
+</section>
+
+<!-- TEXT -->
+<section class="section text-section" data-nav><div class="text-content"><h2>Every piece hides <em>in plain sight</em>.</h2></div></section>
 
 <!-- CTA -->
-<section class="section cta-section">
+<section class="section cta-section" data-nav>
 <div class="text-content">
 <h2>Ready to build?</h2>
 <a href="mailto:tonicthoughtstudios@gmail.com" class="cta-btn">Get in touch</a>
 </div>
 </section>
+
+<!-- EXTRA UPLOAD SLOTS -->
+<section class="section img-section" data-slot="extra1" data-nav><div class="bg empty"></div><div class="upload-hint"><span>drop image</span></div><input type="file" accept="image/*"></section>
+<section class="section img-section" data-slot="extra2" data-nav><div class="bg empty"></div><div class="upload-hint"><span>drop image</span></div><input type="file" accept="image/*"></section>
+<section class="section img-section" data-slot="extra3" data-nav><div class="bg empty"></div><div class="upload-hint"><span>drop image</span></div><input type="file" accept="image/*"></section>
 
 <script>
 // Cursor
@@ -139,26 +167,27 @@ document.querySelectorAll('a,.cta-btn,input[type="file"]').forEach(el=>{el.addEv
 const prog=document.getElementById('progress'),scrollInd=document.getElementById('scrollInd');
 window.addEventListener('scroll',()=>{const s=document.documentElement,p=s.scrollTop/(s.scrollHeight-s.clientHeight)*100;prog.style.width=p+'%';if(s.scrollTop>100)scrollInd.classList.add('hidden')},{passive:true});
 
-// IntersectionObserver for fade-ins + parallax
-const obs=new IntersectionObserver(entries=>{entries.forEach(e=>{e.target.classList.toggle('in-view',e.isIntersecting)})},{threshold:0.15});
-document.querySelectorAll('.img-section,.text-section,.cta-section').forEach(s=>obs.observe(s));
+// Nav dots
+const sections=document.querySelectorAll('[data-nav]');
+const navDots=document.getElementById('navDots');
+sections.forEach((_,i)=>{const d=document.createElement('div');d.className='dot';d.addEventListener('click',()=>sections[i].scrollIntoView({behavior:'smooth'}));navDots.appendChild(d)});
+const dots=navDots.querySelectorAll('.dot');
 
-// Image upload + localStorage
-const KEY='dungeonbuilds_images_v3';
+// IntersectionObserver
+const obs=new IntersectionObserver(entries=>{entries.forEach(e=>{e.target.classList.toggle('in-view',e.isIntersecting);if(e.isIntersecting){const idx=[...sections].indexOf(e.target);dots.forEach((d,i)=>d.classList.toggle('active',i===idx))}})},{threshold:0.15});
+document.querySelectorAll('.img-section,.text-section,.cta-section,.hero').forEach(s=>obs.observe(s));
+
+// Upload for extra slots
+const KEY='dungeonbuilds_images_v4';
 let store={};
 try{store=JSON.parse(localStorage.getItem(KEY))||{}}catch(e){}
-
-function loadSlot(slot,dataUrl){
-const sec=document.querySelector(`[data-slot="${slot}"]`);if(!sec)return;
-const bg=sec.querySelector('.bg');
-bg.style.backgroundImage=`url(${dataUrl})`;
-bg.classList.remove('empty');bg.classList.add('has-image');
-}
+function loadSlot(slot,dataUrl){const sec=document.querySelector(`[data-slot="${slot}"]`);if(!sec)return;const bg=sec.querySelector('.bg');bg.style.backgroundImage=`url(${dataUrl})`;bg.classList.remove('empty');bg.classList.add('has-image')}
 Object.keys(store).forEach(k=>loadSlot(k,store[k]));
 
-document.querySelectorAll('.img-section').forEach(sec=>{
+document.querySelectorAll('.img-section[data-slot]').forEach(sec=>{
 const slot=sec.dataset.slot,input=sec.querySelector('input[type="file"]');
-const handle=file=>{if(!file||!file.type.startsWith('image/'))return;const r=new FileReader();r.onload=e=>{store[slot]=e.target.result;try{localStorage.setItem(KEY,JSON.stringify(store))}catch(ex){/* quota */}loadSlot(slot,e.target.result)};r.readAsDataURL(file)};
+if(!input)return;
+const handle=file=>{if(!file||!file.type.startsWith('image/'))return;const r=new FileReader();r.onload=e=>{store[slot]=e.target.result;try{localStorage.setItem(KEY,JSON.stringify(store))}catch(ex){}loadSlot(slot,e.target.result)};r.readAsDataURL(file)};
 input.addEventListener('change',e=>{handle(e.target.files[0])});
 sec.addEventListener('dragover',e=>{e.preventDefault();sec.classList.add('dragging')});
 sec.addEventListener('dragleave',()=>sec.classList.remove('dragging'));
