@@ -30,12 +30,13 @@ body{font-family:'Inter',sans-serif;background:var(--black);color:#fff;cursor:no
 
 .img-section{background:var(--black)}
 .img-section .bg{position:absolute;inset:0;background-size:cover;background-position:center;background-repeat:no-repeat;will-change:transform;transform:scale(1.05)}
-@keyframes kb1{0%{transform:scale(1.05) translate(0.5%,0.5%)}100%{transform:scale(1.15) translate(-0.5%,-0.5%)}}
-@keyframes kb2{0%{transform:scale(1.05) translate(-0.5%,0.3%)}100%{transform:scale(1.15) translate(0.5%,-0.3%)}}
-@keyframes kb3{0%{transform:scale(1.05) translate(0.3%,-0.5%)}100%{transform:scale(1.15) translate(-0.3%,0.5%)}}
-.img-section.in-view .bg{animation:kb1 12s cubic-bezier(.19,1,.22,1) forwards}
-.img-section.in-view.kb2 .bg{animation:kb2 12s cubic-bezier(.19,1,.22,1) forwards}
-.img-section.in-view.kb3 .bg{animation:kb3 12s cubic-bezier(.19,1,.22,1) forwards}
+@keyframes kb1{0%{transform:scale(1.0) translate(0,0)}100%{transform:scale(1.06) translate(-0.3%,-0.3%)}}
+@keyframes kb2{0%{transform:scale(1.0) translate(0,0)}100%{transform:scale(1.06) translate(0.3%,-0.2%)}}
+@keyframes kb3{0%{transform:scale(1.0) translate(0,0)}100%{transform:scale(1.06) translate(-0.2%,0.3%)}}
+.img-section .bg{transform:scale(1.0)}
+.img-section.in-view .bg{animation:kb1 20s cubic-bezier(.19,1,.22,1) forwards}
+.img-section.in-view.kb2 .bg{animation:kb2 20s cubic-bezier(.19,1,.22,1) forwards}
+.img-section.in-view.kb3 .bg{animation:kb3 20s cubic-bezier(.19,1,.22,1) forwards}
 
 .img-section .vignette{position:absolute;inset:0;background:radial-gradient(ellipse at center,transparent 50%,rgba(0,0,0,0.5) 100%);pointer-events:none;z-index:1}
 
@@ -227,8 +228,10 @@ body{font-family:'Inter',sans-serif;background:var(--black);color:#fff;cursor:no
 <!-- CTA -->
 <section class="section cta-section" data-nav>
 <div class="text-content">
-<h2>Let's make something.</h2>
-<a href="mailto:tonicthoughtstudios@gmail.com" class="cta-btn">Get in touch</a>
+<p style="font-weight:100;font-size:clamp(0.6rem,1.2vw,0.8rem);letter-spacing:0.5em;color:rgba(201,168,76,0.3);text-transform:uppercase;margin-bottom:2rem">A Tonic Thought Studios joint — where furniture meets foreplay</p>
+<h2 style="margin-bottom:2rem">Ready to build?</h2>
+<p style="font-weight:300;font-size:clamp(1rem,2.5vw,1.5rem);color:var(--gold);margin-bottom:3rem">Call Michael. You know you want to.</p>
+<a href="tel:+1" class="cta-btn">Let's talk</a>
 </div>
 </section>
 
