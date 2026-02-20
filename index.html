@@ -123,15 +123,11 @@ body{font-family:'Inter',sans-serif;background:var(--black);color:#fff;cursor:no
 <p style="font-weight:100;font-size:clamp(0.6rem,1.2vw,0.8rem);letter-spacing:0.5em;color:rgba(201,168,76,0.3);text-transform:uppercase;margin-bottom:2rem">A Tonic Thought Studios joint — where furniture meets foreplay</p>
 <h2 style="font-weight:200;font-size:clamp(1.8rem,5vw,4rem);letter-spacing:0.08em;text-align:center;margin-bottom:2rem">Ready to build?</h2>
 <p style="font-weight:300;font-size:clamp(1rem,2.5vw,1.5rem);color:var(--gold);margin-bottom:3rem;text-align:center">Call Michael. You know you want to.</p>
-<a href="tel:+1" class="cta-btn">Let's talk</a>
+<a href="mailto:tonicthoughtstudios@gmail.com?subject=Dungeon%20Builds%20—%20Let's%20Talk" class="cta-btn">Let's talk</a>
 </div>
 </section>
 
-<!-- UPLOAD SLOTS -->
-<div class="upload-wrapper" data-slot="extra1"><div class="bg"></div><div class="upload-hint"><span>drop image</span></div><input type="file" accept="image/*"></div>
-<div class="upload-wrapper" data-slot="extra2"><div class="bg"></div><div class="upload-hint"><span>drop image</span></div><input type="file" accept="image/*"></div>
-<div class="upload-wrapper" data-slot="extra3"><div class="bg"></div><div class="upload-hint"><span>drop image</span></div><input type="file" accept="image/*"></div>
-<div class="upload-wrapper" data-slot="extra4"><div class="bg"></div><div class="upload-hint"><span>drop image</span></div><input type="file" accept="image/*"></div>
+<!-- upload slots removed for clean sharing -->
 
 <script>
 const cur=document.getElementById('cursor'),dot=document.getElementById('cursorDot');
@@ -170,20 +166,7 @@ const revealObs=new IntersectionObserver(entries=>{
 },{threshold:0.2});
 document.querySelectorAll('.text-section,.cta-section').forEach(s=>revealObs.observe(s));
 
-const KEY='dungeonbuilds_images_v5';
-let store={};
-try{store=JSON.parse(localStorage.getItem(KEY))||{}}catch(e){}
-function loadSlot(slot,dataUrl){const sec=document.querySelector(`[data-slot="${slot}"]`);if(!sec)return;const bg=sec.querySelector('.bg');bg.style.backgroundImage=`url(${dataUrl})`;bg.style.backgroundSize='cover';bg.style.backgroundPosition='center'}
-Object.keys(store).forEach(k=>loadSlot(k,store[k]));
-document.querySelectorAll('.upload-wrapper[data-slot]').forEach(sec=>{
-  const slot=sec.dataset.slot,input=sec.querySelector('input[type="file"]');
-  if(!input)return;
-  const handle=file=>{if(!file||!file.type.startsWith('image/'))return;const r=new FileReader();r.onload=e=>{store[slot]=e.target.result;try{localStorage.setItem(KEY,JSON.stringify(store))}catch(ex){}loadSlot(slot,e.target.result)};r.readAsDataURL(file)};
-  input.addEventListener('change',e=>{handle(e.target.files[0])});
-  sec.addEventListener('dragover',e=>{e.preventDefault();sec.classList.add('dragging')});
-  sec.addEventListener('dragleave',()=>sec.classList.remove('dragging'));
-  sec.addEventListener('drop',e=>{e.preventDefault();sec.classList.remove('dragging');handle(e.dataTransfer.files[0])});
-});
+// clean — no upload slots
 </script>
 </body>
 </html>
