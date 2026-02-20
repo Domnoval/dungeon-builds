@@ -9,66 +9,62 @@
 <style>
 *,*::before,*::after{margin:0;padding:0;box-sizing:border-box}
 :root{--gold:#c9a84c;--gold-light:#e8d5a0;--black:#0a0a0a;--grain-opacity:0.035}
-html{scroll-snap-type:y mandatory;overflow-x:hidden;scrollbar-width:none}
+html{overflow-x:hidden;scrollbar-width:none}
 html::-webkit-scrollbar{display:none}
 body{font-family:'Inter',sans-serif;background:var(--black);color:#fff;cursor:none;overflow-x:hidden}
 
+/* Cursor */
 .cursor{position:fixed;width:20px;height:20px;border:1px solid var(--gold);border-radius:50%;pointer-events:none;z-index:10000;transition:transform .15s ease,opacity .15s ease;mix-blend-mode:difference;transform:translate(-50%,-50%)}
-.cursor-dot{position:fixed;width:4px;height:4px;background:var(--gold);border-radius:50%;pointer-events:none;z-index:10001;transform:translate(-50%,-50%);transition:transform .05s ease}
+.cursor-dot{position:fixed;width:4px;height:4px;background:var(--gold);border-radius:50%;pointer-events:none;z-index:10001;transform:translate(-50%,-50%)}
 .cursor.hover{transform:translate(-50%,-50%) scale(2.5);border-color:var(--gold-light)}
 @media(hover:none){.cursor,.cursor-dot{display:none}body{cursor:auto}}
 
+/* Film grain */
 .grain{position:fixed;top:-50%;left:-50%;width:200%;height:200%;z-index:9998;pointer-events:none;opacity:var(--grain-opacity);background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");animation:grainMove .5s steps(1) infinite}
 @keyframes grainMove{0%{transform:translate(0,0)}25%{transform:translate(-5%,5%)}50%{transform:translate(5%,-5%)}75%{transform:translate(-5%,-5%)}100%{transform:translate(5%,5%)}}
 
-.section{height:100vh;height:100dvh;width:100vw;scroll-snap-align:start;scroll-snap-stop:always;position:relative;overflow:hidden;display:flex;align-items:center;justify-content:center}
+/* Progress bar */
+.progress{position:fixed;top:0;left:0;height:2px;background:var(--gold);z-index:9999;width:0}
 
-.hero{background:var(--black);flex-direction:column;gap:0}
-.hero-title{font-weight:900;font-size:clamp(3rem,10vw,8rem);letter-spacing:0.15em;color:var(--gold);opacity:0;animation:fadeInSlow 3s ease forwards;text-transform:uppercase;text-align:center;line-height:1}
-.hero-sub{font-weight:100;font-size:clamp(0.7rem,1.5vw,1rem);letter-spacing:0.5em;color:var(--gold-light);opacity:0;animation:fadeInSlow 2s 2s ease forwards;text-transform:uppercase;margin-top:1.5rem}
-@keyframes fadeInSlow{to{opacity:1}}
-
-.img-section{background:var(--black)}
-.img-section .bg{position:absolute;inset:0;background-size:cover;background-position:center;background-repeat:no-repeat;will-change:transform;transform:scale(1.05)}
-@keyframes kb1{0%{transform:scale(1.0) translate(0,0)}100%{transform:scale(1.06) translate(-0.3%,-0.3%)}}
-@keyframes kb2{0%{transform:scale(1.0) translate(0,0)}100%{transform:scale(1.06) translate(0.3%,-0.2%)}}
-@keyframes kb3{0%{transform:scale(1.0) translate(0,0)}100%{transform:scale(1.06) translate(-0.2%,0.3%)}}
-.img-section .bg{transform:scale(1.0)}
-.img-section.in-view .bg{animation:kb1 20s cubic-bezier(.19,1,.22,1) forwards}
-.img-section.in-view.kb2 .bg{animation:kb2 20s cubic-bezier(.19,1,.22,1) forwards}
-.img-section.in-view.kb3 .bg{animation:kb3 20s cubic-bezier(.19,1,.22,1) forwards}
-
-.img-section .vignette{position:absolute;inset:0;background:radial-gradient(ellipse at center,transparent 50%,rgba(0,0,0,0.5) 100%);pointer-events:none;z-index:1}
-
-.img-section .bg.empty{background:linear-gradient(145deg,#0d0d0d 0%,#1a1a1a 50%,#0d0d0d 100%)}
-.img-section .upload-hint{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;opacity:0;transition:opacity .4s ease;z-index:2}
-.img-section:hover .upload-hint,.img-section.dragging .upload-hint{opacity:1}
-.upload-hint span{font-weight:100;font-size:0.75rem;letter-spacing:0.4em;color:rgba(201,168,76,0.4);text-transform:uppercase;pointer-events:none}
-.img-section input[type="file"]{position:absolute;inset:0;opacity:0;cursor:pointer;z-index:3;width:100%;height:100%}
-
-.text-section{background:var(--black);flex-direction:column}
-.text-section .text-content{opacity:0;transform:translateY(30px);transition:opacity 1.2s ease,transform 1.2s ease}
-.text-section.in-view .text-content{opacity:1;transform:translateY(0)}
-.text-content h2{font-weight:100;font-size:clamp(1.3rem,4vw,3rem);letter-spacing:0.05em;color:#fff;text-align:center;line-height:1.3;max-width:80vw}
-.text-content h2 em{font-style:normal;color:var(--gold)}
-
-.cta-section{background:var(--black);flex-direction:column;gap:2rem}
-.cta-section .text-content{opacity:0;transform:translateY(30px);transition:opacity 1.2s ease,transform 1.2s ease}
-.cta-section.in-view .text-content{opacity:1;transform:translateY(0)}
-.cta-section h2{font-weight:200;font-size:clamp(1.8rem,5vw,4rem);letter-spacing:0.08em;color:#fff;text-align:center}
-.cta-btn{display:inline-block;margin-top:2rem;padding:1rem 3rem;border:1px solid var(--gold);color:var(--gold);font-family:'Inter',sans-serif;font-weight:300;font-size:0.85rem;letter-spacing:0.3em;text-transform:uppercase;text-decoration:none;transition:all .4s ease;background:transparent}
-.cta-btn:hover{background:var(--gold);color:var(--black)}
-
-.progress{position:fixed;top:0;left:0;height:2px;background:var(--gold);z-index:9999;transition:width .1s linear;width:0}
-
+/* Scroll indicator */
 .scroll-indicator{position:fixed;bottom:2rem;left:50%;transform:translateX(-50%);z-index:9999;opacity:0;animation:fadeInSlow 2s 4s ease forwards}
 .scroll-indicator span{display:block;width:1px;height:40px;background:linear-gradient(to bottom,transparent,var(--gold));animation:scrollPulse 2s ease infinite}
 @keyframes scrollPulse{0%,100%{opacity:0.3;transform:scaleY(0.7)}50%{opacity:1;transform:scaleY(1)}}
 .scroll-indicator.hidden{opacity:0!important;transition:opacity .5s ease}
+@keyframes fadeInSlow{to{opacity:1}}
 
-.nav-dots{position:fixed;right:1.5rem;top:50%;transform:translateY(-50%);z-index:9999;display:flex;flex-direction:column;gap:8px}
-.nav-dots .dot{width:6px;height:6px;border-radius:50%;background:rgba(201,168,76,0.2);transition:all .3s ease;cursor:pointer}
-.nav-dots .dot.active{background:var(--gold);transform:scale(1.4)}
+/* Hero */
+.hero{height:100vh;height:100dvh;display:flex;align-items:center;justify-content:center;flex-direction:column;background:var(--black);position:relative}
+.hero-title{font-weight:900;font-size:clamp(3rem,10vw,8rem);letter-spacing:0.15em;color:var(--gold);opacity:0;animation:fadeInSlow 3s ease forwards;text-transform:uppercase;text-align:center;line-height:1}
+.hero-sub{font-weight:100;font-size:clamp(0.7rem,1.5vw,1rem);letter-spacing:0.5em;color:var(--gold-light);opacity:0;animation:fadeInSlow 2s 2s ease forwards;text-transform:uppercase;margin-top:1.5rem}
+
+/* Image zoom wrapper — tall container for scroll room */
+.zoom-wrapper{position:relative;height:180vh;overflow:hidden}
+.zoom-sticky{position:sticky;top:0;height:100vh;height:100dvh;width:100%;overflow:hidden}
+.zoom-bg{position:absolute;inset:0;background-size:cover;background-position:center;background-repeat:no-repeat;will-change:transform;transform:scale(1);transition:none}
+.zoom-vignette{position:absolute;inset:0;background:radial-gradient(ellipse at center,transparent 50%,rgba(0,0,0,0.5) 100%);pointer-events:none;z-index:1}
+
+/* Text interstitials */
+.text-section{min-height:60vh;display:flex;align-items:center;justify-content:center;flex-direction:column;background:var(--black);position:relative;padding:4rem 2rem}
+.text-content{opacity:0;transform:translateY(40px);transition:opacity 1s ease,transform 1s ease}
+.text-section.in-view .text-content{opacity:1;transform:translateY(0)}
+.text-content h2{font-weight:100;font-size:clamp(1.3rem,4vw,3rem);letter-spacing:0.05em;color:#fff;text-align:center;line-height:1.3;max-width:80vw}
+.text-content h2 em{font-style:normal;color:var(--gold)}
+
+/* CTA */
+.cta-section{min-height:100vh;display:flex;align-items:center;justify-content:center;flex-direction:column;background:var(--black);padding:4rem 2rem}
+.cta-section .text-content{opacity:0;transform:translateY(30px);transition:opacity 1.2s ease,transform 1.2s ease}
+.cta-section.in-view .text-content{opacity:1;transform:translateY(0)}
+.cta-btn{display:inline-block;margin-top:2rem;padding:1rem 3rem;border:1px solid var(--gold);color:var(--gold);font-family:'Inter',sans-serif;font-weight:300;font-size:0.85rem;letter-spacing:0.3em;text-transform:uppercase;text-decoration:none;transition:all .4s ease;background:transparent}
+.cta-btn:hover{background:var(--gold);color:var(--black)}
+
+/* Upload slots */
+.upload-wrapper{height:100vh;position:relative;overflow:hidden;display:flex;align-items:center;justify-content:center}
+.upload-wrapper .bg{position:absolute;inset:0;background:linear-gradient(145deg,#0d0d0d 0%,#1a1a1a 50%,#0d0d0d 100%);background-size:cover;background-position:center}
+.upload-wrapper .upload-hint{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;opacity:0;transition:opacity .4s ease;z-index:2}
+.upload-wrapper:hover .upload-hint,.upload-wrapper.dragging .upload-hint{opacity:1}
+.upload-hint span{font-weight:100;font-size:0.75rem;letter-spacing:0.4em;color:rgba(201,168,76,0.4);text-transform:uppercase;pointer-events:none}
+.upload-wrapper input[type="file"]{position:absolute;inset:0;opacity:0;cursor:pointer;z-index:3;width:100%;height:100%}
 </style>
 </head>
 <body>
@@ -77,169 +73,105 @@ body{font-family:'Inter',sans-serif;background:var(--black);color:#fff;cursor:no
 <div class="grain"></div>
 <div class="progress" id="progress"></div>
 <div class="scroll-indicator" id="scrollInd"><span></span></div>
-<nav class="nav-dots" id="navDots"></nav>
 
 <!-- HERO -->
-<section class="section hero" data-nav>
+<section class="hero">
 <h1 class="hero-title">Dungeon Builds</h1>
 <p class="hero-sub">Functional art for small spaces</p>
 </section>
 
 <!-- render_05 — cyberpunk murphy couch, red LEDs — HERO shot -->
-<section class="section img-section" data-nav>
-<div class="bg" style="background-image:url('images/render_05.png')"></div>
-<div class="vignette"></div>
-</section>
+<div class="zoom-wrapper"><div class="zoom-sticky"><div class="zoom-bg" style="background-image:url('images/render_05.png')"></div><div class="zoom-vignette"></div></div></div>
 
-<section class="section text-section" data-nav><div class="text-content"><h2>Wall art that <em>works</em>.</h2></div></section>
+<section class="text-section"><div class="text-content"><h2>Wall art that <em>works</em>.</h2></div></section>
 
-<!-- render_01 — cognac loveseat, LED backlit frame, stone wall -->
-<section class="section img-section kb2" data-nav>
-<div class="bg" style="background-image:url('images/render_01.png')"></div>
-<div class="vignette"></div>
-</section>
+<!-- render_01 -->
+<div class="zoom-wrapper"><div class="zoom-sticky"><div class="zoom-bg" style="background-image:url('images/render_01.png')"></div><div class="zoom-vignette"></div></div></div>
 
-<!-- render_04 — neon bench, pink LED edge, minimal -->
-<section class="section img-section kb3" data-nav>
-<div class="bg" style="background-image:url('images/render_04.png')"></div>
-<div class="vignette"></div>
-</section>
+<!-- render_04 -->
+<div class="zoom-wrapper"><div class="zoom-sticky"><div class="zoom-bg" style="background-image:url('images/render_04.png')"></div><div class="zoom-vignette"></div></div></div>
 
-<section class="section text-section" data-nav><div class="text-content"><h2>Folds flat. Holds <em>everything</em>.</h2></div></section>
+<section class="text-section"><div class="text-content"><h2>Folds flat. Holds <em>everything</em>.</h2></div></section>
 
-<!-- render_06 — detail: tufted leather, buckle, LED strip -->
-<section class="section img-section" data-nav>
-<div class="bg" style="background-image:url('images/render_06.png')"></div>
-<div class="vignette"></div>
-</section>
+<!-- render_06 -->
+<div class="zoom-wrapper"><div class="zoom-sticky"><div class="zoom-bg" style="background-image:url('images/render_06.png')"></div><div class="zoom-vignette"></div></div></div>
 
-<!-- render_13 — black leather chain seat, red LED, padded wall -->
-<section class="section img-section kb2" data-nav>
-<div class="bg" style="background-image:url('images/render_13.png')"></div>
-<div class="vignette"></div>
-</section>
+<!-- render_13 -->
+<div class="zoom-wrapper"><div class="zoom-sticky"><div class="zoom-bg" style="background-image:url('images/render_13.png')"></div><div class="zoom-vignette"></div></div></div>
 
-<!-- render_07 — cognac seat, illuminated palm art panel -->
-<section class="section img-section kb3" data-nav>
-<div class="bg" style="background-image:url('images/render_07.png')"></div>
-<div class="vignette"></div>
-</section>
+<!-- render_07 -->
+<div class="zoom-wrapper"><div class="zoom-sticky"><div class="zoom-bg" style="background-image:url('images/render_07.png')"></div><div class="zoom-vignette"></div></div></div>
 
-<section class="section text-section" data-nav><div class="text-content"><h2>Built from Home Depot.<br>Looks like it cost <em>ten thousand</em>.</h2></div></section>
+<section class="text-section"><div class="text-content"><h2>Built from Home Depot.<br>Looks like it cost <em>ten thousand</em>.</h2></div></section>
 
-<!-- render_02 — red leather industrial bench, chains, gymnast rings -->
-<section class="section img-section" data-nav>
-<div class="bg" style="background-image:url('images/render_02.png')"></div>
-<div class="vignette"></div>
-</section>
+<!-- render_02 -->
+<div class="zoom-wrapper"><div class="zoom-sticky"><div class="zoom-bg" style="background-image:url('images/render_02.png')"></div><div class="zoom-vignette"></div></div></div>
 
-<!-- render_03 — same style, variant angle -->
-<section class="section img-section kb2" data-nav>
-<div class="bg" style="background-image:url('images/render_03.png')"></div>
-<div class="vignette"></div>
-</section>
+<!-- render_03 -->
+<div class="zoom-wrapper"><div class="zoom-sticky"><div class="zoom-bg" style="background-image:url('images/render_03.png')"></div><div class="zoom-vignette"></div></div></div>
 
-<!-- render_12 — red tufted leather, expanded mesh, chain mount -->
-<section class="section img-section kb3" data-nav>
-<div class="bg" style="background-image:url('images/render_12.png')"></div>
-<div class="vignette"></div>
-</section>
+<!-- render_12 -->
+<div class="zoom-wrapper"><div class="zoom-sticky"><div class="zoom-bg" style="background-image:url('images/render_12.png')"></div><div class="zoom-vignette"></div></div></div>
 
-<section class="section text-section" data-nav><div class="text-content"><h2>Your space. Your <em>rules</em>.</h2></div></section>
+<section class="text-section"><div class="text-content"><h2>Your space. Your <em>rules</em>.</h2></div></section>
 
-<!-- render_11 — wood frame, tufted leather, LED backlit panel -->
-<section class="section img-section" data-nav>
-<div class="bg" style="background-image:url('images/render_11.png')"></div>
-<div class="vignette"></div>
-</section>
+<!-- render_11 -->
+<div class="zoom-wrapper"><div class="zoom-sticky"><div class="zoom-bg" style="background-image:url('images/render_11.png')"></div><div class="zoom-vignette"></div></div></div>
 
-<!-- render_08 — chain-suspended bench, pink LED wood frame -->
-<section class="section img-section kb2" data-nav>
-<div class="bg" style="background-image:url('images/render_08.png')"></div>
-<div class="vignette"></div>
-</section>
+<!-- render_08 -->
+<div class="zoom-wrapper"><div class="zoom-sticky"><div class="zoom-bg" style="background-image:url('images/render_08.png')"></div><div class="zoom-vignette"></div></div></div>
 
-<!-- render_14 — wood frame chain seat, pink backlight -->
-<section class="section img-section kb3" data-nav>
-<div class="bg" style="background-image:url('images/render_14.png')"></div>
-<div class="vignette"></div>
-</section>
+<!-- render_14 -->
+<div class="zoom-wrapper"><div class="zoom-sticky"><div class="zoom-bg" style="background-image:url('images/render_14.png')"></div><div class="zoom-vignette"></div></div></div>
 
-<section class="section text-section" data-nav><div class="text-content"><h2>Every piece hides <em>in plain sight</em>.</h2></div></section>
+<section class="text-section"><div class="text-content"><h2>Every piece hides <em>in plain sight</em>.</h2></div></section>
 
-<!-- render_15 — minimal purple fold-down, bathroom context -->
-<section class="section img-section" data-nav>
-<div class="bg" style="background-image:url('images/render_15.png')"></div>
-<div class="vignette"></div>
-</section>
+<!-- render_15 -->
+<div class="zoom-wrapper"><div class="zoom-sticky"><div class="zoom-bg" style="background-image:url('images/render_15.png')"></div><div class="zoom-vignette"></div></div></div>
 
-<!-- render_09 — wood seat with nameplate, chain, pink LED -->
-<section class="section img-section kb2" data-nav>
-<div class="bg" style="background-image:url('images/render_09.png')"></div>
-<div class="vignette"></div>
-</section>
+<!-- render_09 -->
+<div class="zoom-wrapper"><div class="zoom-sticky"><div class="zoom-bg" style="background-image:url('images/render_09.png')"></div><div class="zoom-vignette"></div></div></div>
 
-<!-- render_10 — tufted leather niche, chain, pink LED -->
-<section class="section img-section kb3" data-nav>
-<div class="bg" style="background-image:url('images/render_10.png')"></div>
-<div class="vignette"></div>
-</section>
+<!-- render_10 -->
+<div class="zoom-wrapper"><div class="zoom-sticky"><div class="zoom-bg" style="background-image:url('images/render_10.png')"></div><div class="zoom-vignette"></div></div></div>
 
-<section class="section text-section" data-nav><div class="text-content"><h2>Designed to disappear.<br>Built to <em>perform</em>.</h2></div></section>
+<section class="text-section"><div class="text-content"><h2>Designed to disappear.<br>Built to <em>perform</em>.</h2></div></section>
 
-<!-- render_16 — wood frame, pink LED waterfall backlight -->
-<section class="section img-section" data-nav>
-<div class="bg" style="background-image:url('images/render_16.png')"></div>
-<div class="vignette"></div>
-</section>
+<!-- render_16 -->
+<div class="zoom-wrapper"><div class="zoom-sticky"><div class="zoom-bg" style="background-image:url('images/render_16.png')"></div><div class="zoom-vignette"></div></div></div>
 
-<!-- render_17 — suspended bench, warm LED, pine frame -->
-<section class="section img-section kb2" data-nav>
-<div class="bg" style="background-image:url('images/render_17.png')"></div>
-<div class="vignette"></div>
-</section>
+<!-- render_17 -->
+<div class="zoom-wrapper"><div class="zoom-sticky"><div class="zoom-bg" style="background-image:url('images/render_17.png')"></div><div class="zoom-vignette"></div></div></div>
 
-<!-- render_19 — dark oak, pulleys, pink LED, tufted leather -->
-<section class="section img-section kb3" data-nav>
-<div class="bg" style="background-image:url('images/render_19.png')"></div>
-<div class="vignette"></div>
-</section>
+<!-- render_19 -->
+<div class="zoom-wrapper"><div class="zoom-sticky"><div class="zoom-bg" style="background-image:url('images/render_19.png')"></div><div class="zoom-vignette"></div></div></div>
 
-<!-- render_20 — chain-suspended, pink backlight, clean -->
-<section class="section img-section" data-nav>
-<div class="bg" style="background-image:url('images/render_20.png')"></div>
-<div class="vignette"></div>
-</section>
+<!-- render_20 -->
+<div class="zoom-wrapper"><div class="zoom-sticky"><div class="zoom-bg" style="background-image:url('images/render_20.png')"></div><div class="zoom-vignette"></div></div></div>
 
-<!-- render_21 — wood frame chain seat, warm backlight -->
-<section class="section img-section kb2" data-nav>
-<div class="bg" style="background-image:url('images/render_21.png')"></div>
-<div class="vignette"></div>
-</section>
+<!-- render_21 -->
+<div class="zoom-wrapper"><div class="zoom-sticky"><div class="zoom-bg" style="background-image:url('images/render_21.png')"></div><div class="zoom-vignette"></div></div></div>
 
-<!-- render_22 — pine frame, pink backlight, corner mount -->
-<section class="section img-section kb3" data-nav>
-<div class="bg" style="background-image:url('images/render_22.png')"></div>
-<div class="vignette"></div>
-</section>
+<!-- render_22 -->
+<div class="zoom-wrapper"><div class="zoom-sticky"><div class="zoom-bg" style="background-image:url('images/render_22.png')"></div><div class="zoom-vignette"></div></div></div>
 
-<section class="section text-section" data-nav><div class="text-content"><h2>Ready to <em>build</em>?</h2></div></section>
+<section class="text-section"><div class="text-content"><h2>Ready to <em>build</em>?</h2></div></section>
 
 <!-- CTA -->
-<section class="section cta-section" data-nav>
+<section class="cta-section">
 <div class="text-content">
 <p style="font-weight:100;font-size:clamp(0.6rem,1.2vw,0.8rem);letter-spacing:0.5em;color:rgba(201,168,76,0.3);text-transform:uppercase;margin-bottom:2rem">A Tonic Thought Studios joint — where furniture meets foreplay</p>
-<h2 style="margin-bottom:2rem">Ready to build?</h2>
-<p style="font-weight:300;font-size:clamp(1rem,2.5vw,1.5rem);color:var(--gold);margin-bottom:3rem">Call Michael. You know you want to.</p>
+<h2 style="font-weight:200;font-size:clamp(1.8rem,5vw,4rem);letter-spacing:0.08em;text-align:center;margin-bottom:2rem">Ready to build?</h2>
+<p style="font-weight:300;font-size:clamp(1rem,2.5vw,1.5rem);color:var(--gold);margin-bottom:3rem;text-align:center">Call Michael. You know you want to.</p>
 <a href="tel:+1" class="cta-btn">Let's talk</a>
 </div>
 </section>
 
-<!-- EXTRA UPLOAD SLOTS -->
-<section class="section img-section" data-slot="extra1" data-nav><div class="bg empty"></div><div class="upload-hint"><span>drop image</span></div><input type="file" accept="image/*"></section>
-<section class="section img-section" data-slot="extra2" data-nav><div class="bg empty"></div><div class="upload-hint"><span>drop image</span></div><input type="file" accept="image/*"></section>
-<section class="section img-section" data-slot="extra3" data-nav><div class="bg empty"></div><div class="upload-hint"><span>drop image</span></div><input type="file" accept="image/*"></section>
-<section class="section img-section" data-slot="extra4" data-nav><div class="bg empty"></div><div class="upload-hint"><span>drop image</span></div><input type="file" accept="image/*"></section>
+<!-- UPLOAD SLOTS -->
+<div class="upload-wrapper" data-slot="extra1"><div class="bg"></div><div class="upload-hint"><span>drop image</span></div><input type="file" accept="image/*"></div>
+<div class="upload-wrapper" data-slot="extra2"><div class="bg"></div><div class="upload-hint"><span>drop image</span></div><input type="file" accept="image/*"></div>
+<div class="upload-wrapper" data-slot="extra3"><div class="bg"></div><div class="upload-hint"><span>drop image</span></div><input type="file" accept="image/*"></div>
+<div class="upload-wrapper" data-slot="extra4"><div class="bg"></div><div class="upload-hint"><span>drop image</span></div><input type="file" accept="image/*"></div>
 
 <script>
 // Cursor
@@ -249,35 +181,57 @@ document.addEventListener('mousemove',e=>{mx=e.clientX;my=e.clientY;dot.style.le
 (function loop(){cx+=(mx-cx)*.12;cy+=(my-cy)*.12;cur.style.left=cx+'px';cur.style.top=cy+'px';requestAnimationFrame(loop)})();
 document.querySelectorAll('a,.cta-btn,input[type="file"]').forEach(el=>{el.addEventListener('mouseenter',()=>cur.classList.add('hover'));el.addEventListener('mouseleave',()=>cur.classList.remove('hover'))});
 
-// Scroll progress
+// Progress bar + scroll indicator
 const prog=document.getElementById('progress'),scrollInd=document.getElementById('scrollInd');
-window.addEventListener('scroll',()=>{const s=document.documentElement,p=s.scrollTop/(s.scrollHeight-s.clientHeight)*100;prog.style.width=p+'%';if(s.scrollTop>100)scrollInd.classList.add('hidden')},{passive:true});
 
-// Nav dots
-const sections=document.querySelectorAll('[data-nav]');
-const navDots=document.getElementById('navDots');
-sections.forEach((_,i)=>{const d=document.createElement('div');d.className='dot';d.addEventListener('click',()=>sections[i].scrollIntoView({behavior:'smooth'}));navDots.appendChild(d)});
-const dots=navDots.querySelectorAll('.dot');
+// Scroll-driven zoom
+const wrappers=document.querySelectorAll('.zoom-wrapper');
 
-// IntersectionObserver
-const obs=new IntersectionObserver(entries=>{entries.forEach(e=>{e.target.classList.toggle('in-view',e.isIntersecting);if(e.isIntersecting){const idx=[...sections].indexOf(e.target);dots.forEach((d,i)=>d.classList.toggle('active',i===idx))}})},{threshold:0.15});
-document.querySelectorAll('.img-section,.text-section,.cta-section,.hero').forEach(s=>obs.observe(s));
+function onScroll(){
+  // Progress bar
+  const s=document.documentElement;
+  const pct=s.scrollTop/(s.scrollHeight-s.clientHeight)*100;
+  prog.style.width=pct+'%';
+  if(s.scrollTop>100)scrollInd.classList.add('hidden');
 
-// Upload for extra slots
+  // Zoom each wrapper
+  const vh=window.innerHeight;
+  wrappers.forEach(w=>{
+    const rect=w.getBoundingClientRect();
+    const wrapH=w.offsetHeight;
+    const scrollRoom=wrapH-vh;
+    if(scrollRoom<=0)return;
+    // How far through the scroll room (0 at top, 1 when sticky releases)
+    const progress=Math.min(1,Math.max(0,(0-rect.top)/scrollRoom));
+    const scale=1+progress*0.25;
+    const bg=w.querySelector('.zoom-bg');
+    if(bg)bg.style.transform='scale('+scale+')';
+  });
+}
+
+window.addEventListener('scroll',onScroll,{passive:true});
+onScroll();
+
+// Text/CTA reveal
+const revealObs=new IntersectionObserver(entries=>{
+  entries.forEach(e=>{if(e.isIntersecting)e.target.classList.add('in-view')});
+},{threshold:0.2});
+document.querySelectorAll('.text-section,.cta-section').forEach(s=>revealObs.observe(s));
+
+// Upload slots
 const KEY='dungeonbuilds_images_v5';
 let store={};
 try{store=JSON.parse(localStorage.getItem(KEY))||{}}catch(e){}
-function loadSlot(slot,dataUrl){const sec=document.querySelector(`[data-slot="${slot}"]`);if(!sec)return;const bg=sec.querySelector('.bg');bg.style.backgroundImage=`url(${dataUrl})`;bg.classList.remove('empty');bg.classList.add('has-image')}
+function loadSlot(slot,dataUrl){const sec=document.querySelector(`[data-slot="${slot}"]`);if(!sec)return;const bg=sec.querySelector('.bg');bg.style.backgroundImage=`url(${dataUrl})`;bg.style.backgroundSize='cover';bg.style.backgroundPosition='center'}
 Object.keys(store).forEach(k=>loadSlot(k,store[k]));
-
-document.querySelectorAll('.img-section[data-slot]').forEach(sec=>{
-const slot=sec.dataset.slot,input=sec.querySelector('input[type="file"]');
-if(!input)return;
-const handle=file=>{if(!file||!file.type.startsWith('image/'))return;const r=new FileReader();r.onload=e=>{store[slot]=e.target.result;try{localStorage.setItem(KEY,JSON.stringify(store))}catch(ex){}loadSlot(slot,e.target.result)};r.readAsDataURL(file)};
-input.addEventListener('change',e=>{handle(e.target.files[0])});
-sec.addEventListener('dragover',e=>{e.preventDefault();sec.classList.add('dragging')});
-sec.addEventListener('dragleave',()=>sec.classList.remove('dragging'));
-sec.addEventListener('drop',e=>{e.preventDefault();sec.classList.remove('dragging');handle(e.dataTransfer.files[0])});
+document.querySelectorAll('.upload-wrapper[data-slot]').forEach(sec=>{
+  const slot=sec.dataset.slot,input=sec.querySelector('input[type="file"]');
+  if(!input)return;
+  const handle=file=>{if(!file||!file.type.startsWith('image/'))return;const r=new FileReader();r.onload=e=>{store[slot]=e.target.result;try{localStorage.setItem(KEY,JSON.stringify(store))}catch(ex){}loadSlot(slot,e.target.result)};r.readAsDataURL(file)};
+  input.addEventListener('change',e=>{handle(e.target.files[0])});
+  sec.addEventListener('dragover',e=>{e.preventDefault();sec.classList.add('dragging')});
+  sec.addEventListener('dragleave',()=>sec.classList.remove('dragging'));
+  sec.addEventListener('drop',e=>{e.preventDefault();sec.classList.remove('dragging');handle(e.dataTransfer.files[0])});
 });
 </script>
 </body>
