@@ -13,52 +13,44 @@ html{overflow-x:hidden;scrollbar-width:none}
 html::-webkit-scrollbar{display:none}
 body{font-family:'Inter',sans-serif;background:var(--black);color:#fff;cursor:none;overflow-x:hidden}
 
-/* Cursor */
 .cursor{position:fixed;width:20px;height:20px;border:1px solid var(--gold);border-radius:50%;pointer-events:none;z-index:10000;transition:transform .15s ease,opacity .15s ease;mix-blend-mode:difference;transform:translate(-50%,-50%)}
 .cursor-dot{position:fixed;width:4px;height:4px;background:var(--gold);border-radius:50%;pointer-events:none;z-index:10001;transform:translate(-50%,-50%)}
 .cursor.hover{transform:translate(-50%,-50%) scale(2.5);border-color:var(--gold-light)}
 @media(hover:none){.cursor,.cursor-dot{display:none}body{cursor:auto}}
 
-/* Film grain */
 .grain{position:fixed;top:-50%;left:-50%;width:200%;height:200%;z-index:9998;pointer-events:none;opacity:var(--grain-opacity);background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");animation:grainMove .5s steps(1) infinite}
 @keyframes grainMove{0%{transform:translate(0,0)}25%{transform:translate(-5%,5%)}50%{transform:translate(5%,-5%)}75%{transform:translate(-5%,-5%)}100%{transform:translate(5%,5%)}}
 
-/* Progress bar */
 .progress{position:fixed;top:0;left:0;height:2px;background:var(--gold);z-index:9999;width:0}
 
-/* Scroll indicator */
 .scroll-indicator{position:fixed;bottom:2rem;left:50%;transform:translateX(-50%);z-index:9999;opacity:0;animation:fadeInSlow 2s 4s ease forwards}
 .scroll-indicator span{display:block;width:1px;height:40px;background:linear-gradient(to bottom,transparent,var(--gold));animation:scrollPulse 2s ease infinite}
 @keyframes scrollPulse{0%,100%{opacity:0.3;transform:scaleY(0.7)}50%{opacity:1;transform:scaleY(1)}}
 .scroll-indicator.hidden{opacity:0!important;transition:opacity .5s ease}
 @keyframes fadeInSlow{to{opacity:1}}
 
-/* Hero */
 .hero{height:100vh;height:100dvh;display:flex;align-items:center;justify-content:center;flex-direction:column;background:var(--black);position:relative}
 .hero-title{font-weight:900;font-size:clamp(3rem,10vw,8rem);letter-spacing:0.15em;color:var(--gold);opacity:0;animation:fadeInSlow 3s ease forwards;text-transform:uppercase;text-align:center;line-height:1}
 .hero-sub{font-weight:100;font-size:clamp(0.7rem,1.5vw,1rem);letter-spacing:0.5em;color:var(--gold-light);opacity:0;animation:fadeInSlow 2s 2s ease forwards;text-transform:uppercase;margin-top:1.5rem}
 
-/* Image zoom wrapper — tall container for scroll room */
+/* Image zoom wrapper */
 .zoom-wrapper{position:relative;height:180vh;overflow:hidden}
-.zoom-sticky{position:sticky;top:0;height:100vh;height:100dvh;width:100%;overflow:hidden}
-.zoom-bg{position:absolute;inset:0;background-size:cover;background-position:center;background-repeat:no-repeat;will-change:transform;transform:scale(1);transition:none}
-.zoom-vignette{position:absolute;inset:0;background:radial-gradient(ellipse at center,transparent 50%,rgba(0,0,0,0.5) 100%);pointer-events:none;z-index:1}
+.zoom-sticky{position:sticky;top:0;height:100vh;height:100dvh;width:100%;overflow:hidden;display:flex;align-items:center;justify-content:center}
+.zoom-sticky .gradient-bg{position:absolute;inset:0;z-index:0}
+.zoom-sticky img{position:relative;z-index:1;max-width:100vw;max-height:100vh;width:auto;height:auto;object-fit:contain;will-change:transform;transform:scale(1);display:block}
+.zoom-vignette{position:absolute;inset:0;background:radial-gradient(ellipse at center,transparent 50%,rgba(0,0,0,0.5) 100%);pointer-events:none;z-index:2}
 
-/* Text interstitials */
 .text-section{min-height:60vh;display:flex;align-items:center;justify-content:center;flex-direction:column;background:var(--black);position:relative;padding:4rem 2rem}
 .text-content{opacity:0;transform:translateY(40px);transition:opacity 1s ease,transform 1s ease}
 .text-section.in-view .text-content{opacity:1;transform:translateY(0)}
 .text-content h2{font-weight:100;font-size:clamp(1.3rem,4vw,3rem);letter-spacing:0.05em;color:#fff;text-align:center;line-height:1.3;max-width:80vw}
 .text-content h2 em{font-style:normal;color:var(--gold)}
 
-/* CTA */
 .cta-section{min-height:100vh;display:flex;align-items:center;justify-content:center;flex-direction:column;background:var(--black);padding:4rem 2rem}
-.cta-section .text-content{opacity:0;transform:translateY(30px);transition:opacity 1.2s ease,transform 1.2s ease}
 .cta-section.in-view .text-content{opacity:1;transform:translateY(0)}
 .cta-btn{display:inline-block;margin-top:2rem;padding:1rem 3rem;border:1px solid var(--gold);color:var(--gold);font-family:'Inter',sans-serif;font-weight:300;font-size:0.85rem;letter-spacing:0.3em;text-transform:uppercase;text-decoration:none;transition:all .4s ease;background:transparent}
 .cta-btn:hover{background:var(--gold);color:var(--black)}
 
-/* Upload slots */
 .upload-wrapper{height:100vh;position:relative;overflow:hidden;display:flex;align-items:center;justify-content:center}
 .upload-wrapper .bg{position:absolute;inset:0;background:linear-gradient(145deg,#0d0d0d 0%,#1a1a1a 50%,#0d0d0d 100%);background-size:cover;background-position:center}
 .upload-wrapper .upload-hint{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;opacity:0;transition:opacity .4s ease;z-index:2}
@@ -81,79 +73,47 @@ body{font-family:'Inter',sans-serif;background:var(--black);color:#fff;cursor:no
 </section>
 
 <!-- render_05 — cyberpunk murphy couch, red LEDs — HERO shot -->
-<div class="zoom-wrapper"><div class="zoom-sticky"><div class="zoom-bg" style="background-image:url('images/render_05.png')"></div><div class="zoom-vignette"></div></div></div>
+<div class="zoom-wrapper"><div class="zoom-sticky"><div class="gradient-bg" style="background:radial-gradient(ellipse at center,rgba(180,30,30,0.08),var(--black) 70%)"></div><img src="images/render_05.png" alt="Cyberpunk murphy couch with red LEDs"><div class="zoom-vignette"></div></div></div>
 
 <section class="text-section"><div class="text-content"><h2>Wall art that <em>works</em>.</h2></div></section>
 
-<!-- render_01 -->
-<div class="zoom-wrapper"><div class="zoom-sticky"><div class="zoom-bg" style="background-image:url('images/render_01.png')"></div><div class="zoom-vignette"></div></div></div>
+<!-- render_01 — cognac loveseat, warm amber -->
+<div class="zoom-wrapper"><div class="zoom-sticky"><div class="gradient-bg" style="background:radial-gradient(ellipse at center,rgba(180,120,40,0.08),var(--black) 70%)"></div><img src="images/render_01.png" alt="Cognac loveseat with LED frame and stone wall"><div class="zoom-vignette"></div></div></div>
 
-<!-- render_04 -->
-<div class="zoom-wrapper"><div class="zoom-sticky"><div class="zoom-bg" style="background-image:url('images/render_04.png')"></div><div class="zoom-vignette"></div></div></div>
+<!-- render_04 — minimal neon bench, pink LED -->
+<div class="zoom-wrapper"><div class="zoom-sticky"><div class="gradient-bg" style="background:radial-gradient(ellipse at center,rgba(200,50,150,0.08),var(--black) 70%)"></div><img src="images/render_04.png" alt="Minimal neon bench with pink LED edge"><div class="zoom-vignette"></div></div></div>
 
 <section class="text-section"><div class="text-content"><h2>Folds flat. Holds <em>everything</em>.</h2></div></section>
 
-<!-- render_06 -->
-<div class="zoom-wrapper"><div class="zoom-sticky"><div class="zoom-bg" style="background-image:url('images/render_06.png')"></div><div class="zoom-vignette"></div></div></div>
+<!-- render_06 — tufted leather detail, purple LEDs -->
+<div class="zoom-wrapper"><div class="zoom-sticky"><div class="gradient-bg" style="background:radial-gradient(ellipse at center,rgba(140,40,180,0.08),var(--black) 70%)"></div><img src="images/render_06.png" alt="Tufted leather detail with buckle and purple LEDs"><div class="zoom-vignette"></div></div></div>
 
-<!-- render_13 -->
-<div class="zoom-wrapper"><div class="zoom-sticky"><div class="zoom-bg" style="background-image:url('images/render_13.png')"></div><div class="zoom-vignette"></div></div></div>
-
-<!-- render_07 -->
-<div class="zoom-wrapper"><div class="zoom-sticky"><div class="zoom-bg" style="background-image:url('images/render_07.png')"></div><div class="zoom-vignette"></div></div></div>
+<!-- render_13 — black leather chain seat, red LED -->
+<div class="zoom-wrapper"><div class="zoom-sticky"><div class="gradient-bg" style="background:radial-gradient(ellipse at center,rgba(180,30,30,0.08),var(--black) 70%)"></div><img src="images/render_13.png" alt="Black leather chain seat with red LED padded wall"><div class="zoom-vignette"></div></div></div>
 
 <section class="text-section"><div class="text-content"><h2>Built from Home Depot.<br>Looks like it cost <em>ten thousand</em>.</h2></div></section>
 
-<!-- render_02 -->
-<div class="zoom-wrapper"><div class="zoom-sticky"><div class="zoom-bg" style="background-image:url('images/render_02.png')"></div><div class="zoom-vignette"></div></div></div>
+<!-- render_12 — red leather, expanded mesh -->
+<div class="zoom-wrapper"><div class="zoom-sticky"><div class="gradient-bg" style="background:radial-gradient(ellipse at center,rgba(180,30,30,0.08),var(--black) 70%)"></div><img src="images/render_12.png" alt="Red leather with expanded mesh and chain mount"><div class="zoom-vignette"></div></div></div>
 
-<!-- render_03 -->
-<div class="zoom-wrapper"><div class="zoom-sticky"><div class="zoom-bg" style="background-image:url('images/render_03.png')"></div><div class="zoom-vignette"></div></div></div>
-
-<!-- render_12 -->
-<div class="zoom-wrapper"><div class="zoom-sticky"><div class="zoom-bg" style="background-image:url('images/render_12.png')"></div><div class="zoom-vignette"></div></div></div>
-
-<section class="text-section"><div class="text-content"><h2>Your space. Your <em>rules</em>.</h2></div></section>
-
-<!-- render_11 -->
-<div class="zoom-wrapper"><div class="zoom-sticky"><div class="zoom-bg" style="background-image:url('images/render_11.png')"></div><div class="zoom-vignette"></div></div></div>
-
-<!-- render_08 -->
-<div class="zoom-wrapper"><div class="zoom-sticky"><div class="zoom-bg" style="background-image:url('images/render_08.png')"></div><div class="zoom-vignette"></div></div></div>
-
-<!-- render_14 -->
-<div class="zoom-wrapper"><div class="zoom-sticky"><div class="zoom-bg" style="background-image:url('images/render_14.png')"></div><div class="zoom-vignette"></div></div></div>
+<!-- render_15 — minimal purple fold-down bathroom seat -->
+<div class="zoom-wrapper"><div class="zoom-sticky"><div class="gradient-bg" style="background:radial-gradient(ellipse at center,rgba(140,40,180,0.08),var(--black) 70%)"></div><img src="images/render_15.png" alt="Minimal purple fold-down bathroom seat"><div class="zoom-vignette"></div></div></div>
 
 <section class="text-section"><div class="text-content"><h2>Every piece hides <em>in plain sight</em>.</h2></div></section>
 
-<!-- render_15 -->
-<div class="zoom-wrapper"><div class="zoom-sticky"><div class="zoom-bg" style="background-image:url('images/render_15.png')"></div><div class="zoom-vignette"></div></div></div>
+<!-- render_08 — wood frame, chain-suspended, pink LED -->
+<div class="zoom-wrapper"><div class="zoom-sticky"><div class="gradient-bg" style="background:radial-gradient(ellipse at center,rgba(200,50,150,0.08),var(--black) 70%)"></div><img src="images/render_08.png" alt="Wood frame chain-suspended seat with pink LED"><div class="zoom-vignette"></div></div></div>
 
-<!-- render_09 -->
-<div class="zoom-wrapper"><div class="zoom-sticky"><div class="zoom-bg" style="background-image:url('images/render_09.png')"></div><div class="zoom-vignette"></div></div></div>
-
-<!-- render_10 -->
-<div class="zoom-wrapper"><div class="zoom-sticky"><div class="zoom-bg" style="background-image:url('images/render_10.png')"></div><div class="zoom-vignette"></div></div></div>
+<!-- render_19 — dark oak, pulleys, tufted leather -->
+<div class="zoom-wrapper"><div class="zoom-sticky"><div class="gradient-bg" style="background:radial-gradient(ellipse at center,rgba(180,120,40,0.08),var(--black) 70%)"></div><img src="images/render_19.png" alt="Dark oak with pulleys and tufted leather"><div class="zoom-vignette"></div></div></div>
 
 <section class="text-section"><div class="text-content"><h2>Designed to disappear.<br>Built to <em>perform</em>.</h2></div></section>
 
-<!-- render_16 -->
-<div class="zoom-wrapper"><div class="zoom-sticky"><div class="zoom-bg" style="background-image:url('images/render_16.png')"></div><div class="zoom-vignette"></div></div></div>
+<!-- render_03 — red leather industrial, chains, stone wall -->
+<div class="zoom-wrapper"><div class="zoom-sticky"><div class="gradient-bg" style="background:radial-gradient(ellipse at center,rgba(180,30,30,0.08),var(--black) 70%)"></div><img src="images/render_03.png" alt="Red leather industrial with chains and stone wall"><div class="zoom-vignette"></div></div></div>
 
-<!-- render_17 -->
-<div class="zoom-wrapper"><div class="zoom-sticky"><div class="zoom-bg" style="background-image:url('images/render_17.png')"></div><div class="zoom-vignette"></div></div></div>
-
-<!-- render_19 -->
-<div class="zoom-wrapper"><div class="zoom-sticky"><div class="zoom-bg" style="background-image:url('images/render_19.png')"></div><div class="zoom-vignette"></div></div></div>
-
-<!-- render_20 -->
-<div class="zoom-wrapper"><div class="zoom-sticky"><div class="zoom-bg" style="background-image:url('images/render_20.png')"></div><div class="zoom-vignette"></div></div></div>
-
-<!-- render_21 -->
-<div class="zoom-wrapper"><div class="zoom-sticky"><div class="zoom-bg" style="background-image:url('images/render_21.png')"></div><div class="zoom-vignette"></div></div></div>
-
-<!-- render_22 -->
-<div class="zoom-wrapper"><div class="zoom-sticky"><div class="zoom-bg" style="background-image:url('images/render_22.png')"></div><div class="zoom-vignette"></div></div></div>
+<!-- render_17 — suspended bench, warm LED, pine frame -->
+<div class="zoom-wrapper"><div class="zoom-sticky"><div class="gradient-bg" style="background:radial-gradient(ellipse at center,rgba(180,120,40,0.08),var(--black) 70%)"></div><img src="images/render_17.png" alt="Suspended bench with warm LED and pine frame"><div class="zoom-vignette"></div></div></div>
 
 <section class="text-section"><div class="text-content"><h2>Ready to <em>build</em>?</h2></div></section>
 
@@ -174,51 +134,42 @@ body{font-family:'Inter',sans-serif;background:var(--black);color:#fff;cursor:no
 <div class="upload-wrapper" data-slot="extra4"><div class="bg"></div><div class="upload-hint"><span>drop image</span></div><input type="file" accept="image/*"></div>
 
 <script>
-// Cursor
 const cur=document.getElementById('cursor'),dot=document.getElementById('cursorDot');
 let mx=0,my=0,cx=0,cy=0;
 document.addEventListener('mousemove',e=>{mx=e.clientX;my=e.clientY;dot.style.left=mx+'px';dot.style.top=my+'px'});
 (function loop(){cx+=(mx-cx)*.12;cy+=(my-cy)*.12;cur.style.left=cx+'px';cur.style.top=cy+'px';requestAnimationFrame(loop)})();
 document.querySelectorAll('a,.cta-btn,input[type="file"]').forEach(el=>{el.addEventListener('mouseenter',()=>cur.classList.add('hover'));el.addEventListener('mouseleave',()=>cur.classList.remove('hover'))});
 
-// Progress bar + scroll indicator
 const prog=document.getElementById('progress'),scrollInd=document.getElementById('scrollInd');
-
-// Scroll-driven zoom
 const wrappers=document.querySelectorAll('.zoom-wrapper');
 
 function onScroll(){
-  // Progress bar
   const s=document.documentElement;
   const pct=s.scrollTop/(s.scrollHeight-s.clientHeight)*100;
   prog.style.width=pct+'%';
   if(s.scrollTop>100)scrollInd.classList.add('hidden');
 
-  // Zoom each wrapper
   const vh=window.innerHeight;
   wrappers.forEach(w=>{
     const rect=w.getBoundingClientRect();
     const wrapH=w.offsetHeight;
     const scrollRoom=wrapH-vh;
     if(scrollRoom<=0)return;
-    // How far through the scroll room (0 at top, 1 when sticky releases)
     const progress=Math.min(1,Math.max(0,(0-rect.top)/scrollRoom));
-    const scale=1+progress*0.25;
-    const bg=w.querySelector('.zoom-bg');
-    if(bg)bg.style.transform='scale('+scale+')';
+    const scale=1+progress*0.1;
+    const img=w.querySelector('img');
+    if(img)img.style.transform='scale('+scale+')';
   });
 }
 
 window.addEventListener('scroll',onScroll,{passive:true});
 onScroll();
 
-// Text/CTA reveal
 const revealObs=new IntersectionObserver(entries=>{
   entries.forEach(e=>{if(e.isIntersecting)e.target.classList.add('in-view')});
 },{threshold:0.2});
 document.querySelectorAll('.text-section,.cta-section').forEach(s=>revealObs.observe(s));
 
-// Upload slots
 const KEY='dungeonbuilds_images_v5';
 let store={};
 try{store=JSON.parse(localStorage.getItem(KEY))||{}}catch(e){}
