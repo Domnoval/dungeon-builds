@@ -18,7 +18,7 @@ body{font-family:'Inter',sans-serif;background:var(--black);color:#fff;cursor:no
 .cursor.hover{transform:translate(-50%,-50%) scale(2.5);border-color:var(--gold-light)}
 @media(hover:none){.cursor,.cursor-dot{display:none}body{cursor:auto}}
 
-.grain{position:fixed;top:-50%;left:-50%;width:200%;height:200%;z-index:9998;pointer-events:none;opacity:var(--grain-opacity);background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");animation:grainMove 0.5s steps(1) infinite}
+.grain{position:fixed;top:-50%;left:-50%;width:200%;height:200%;z-index:9998;pointer-events:none;opacity:var(--grain-opacity);background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");animation:grainMove .5s steps(1) infinite}
 @keyframes grainMove{0%{transform:translate(0,0)}25%{transform:translate(-5%,5%)}50%{transform:translate(5%,-5%)}75%{transform:translate(-5%,-5%)}100%{transform:translate(5%,5%)}}
 
 .section{height:100vh;height:100dvh;width:100vw;scroll-snap-align:start;scroll-snap-stop:always;position:relative;overflow:hidden;display:flex;align-items:center;justify-content:center}
@@ -28,25 +28,22 @@ body{font-family:'Inter',sans-serif;background:var(--black);color:#fff;cursor:no
 .hero-sub{font-weight:100;font-size:clamp(0.7rem,1.5vw,1rem);letter-spacing:0.5em;color:var(--gold-light);opacity:0;animation:fadeInSlow 2s 2s ease forwards;text-transform:uppercase;margin-top:1.5rem}
 @keyframes fadeInSlow{to{opacity:1}}
 
-/* Image sections — Ken Burns */
 .img-section{background:var(--black)}
-.img-section .bg{position:absolute;inset:0;background-size:cover;background-position:center;background-repeat:no-repeat;will-change:transform;transform:scale(1.08);transition:none}
-@keyframes kenBurnsIn{0%{transform:scale(1.12) translate(1%,1%)}100%{transform:scale(1.0) translate(-0.5%,-0.5%)}}
-@keyframes kenBurnsIn2{0%{transform:scale(1.10) translate(-1%,0.5%)}100%{transform:scale(1.02) translate(0.5%,-0.5%)}}
-@keyframes kenBurnsIn3{0%{transform:scale(1.05) translate(0.5%,-1%)}100%{transform:scale(1.12) translate(-0.5%,0.5%)}}
-.img-section.in-view .bg{animation:kenBurnsIn 12s cubic-bezier(.19,1,.22,1) forwards}
-.img-section.in-view.kb2 .bg{animation:kenBurnsIn2 14s cubic-bezier(.19,1,.22,1) forwards}
-.img-section.in-view.kb3 .bg{animation:kenBurnsIn3 16s cubic-bezier(.19,1,.22,1) forwards}
+.img-section .bg{position:absolute;inset:0;background-size:cover;background-position:center;background-repeat:no-repeat;will-change:transform;transform:scale(1.05)}
+@keyframes kb1{0%{transform:scale(1.05) translate(0.5%,0.5%)}100%{transform:scale(1.15) translate(-0.5%,-0.5%)}}
+@keyframes kb2{0%{transform:scale(1.05) translate(-0.5%,0.3%)}100%{transform:scale(1.15) translate(0.5%,-0.3%)}}
+@keyframes kb3{0%{transform:scale(1.05) translate(0.3%,-0.5%)}100%{transform:scale(1.15) translate(-0.3%,0.5%)}}
+.img-section.in-view .bg{animation:kb1 12s cubic-bezier(.19,1,.22,1) forwards}
+.img-section.in-view.kb2 .bg{animation:kb2 12s cubic-bezier(.19,1,.22,1) forwards}
+.img-section.in-view.kb3 .bg{animation:kb3 12s cubic-bezier(.19,1,.22,1) forwards}
 
-/* Upload slots */
+.img-section .vignette{position:absolute;inset:0;background:radial-gradient(ellipse at center,transparent 50%,rgba(0,0,0,0.5) 100%);pointer-events:none;z-index:1}
+
 .img-section .bg.empty{background:linear-gradient(145deg,#0d0d0d 0%,#1a1a1a 50%,#0d0d0d 100%)}
 .img-section .upload-hint{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;opacity:0;transition:opacity .4s ease;z-index:2}
 .img-section:hover .upload-hint,.img-section.dragging .upload-hint{opacity:1}
 .upload-hint span{font-weight:100;font-size:0.75rem;letter-spacing:0.4em;color:rgba(201,168,76,0.4);text-transform:uppercase;pointer-events:none}
 .img-section input[type="file"]{position:absolute;inset:0;opacity:0;cursor:pointer;z-index:3;width:100%;height:100%}
-
-/* Vignette on image sections */
-.img-section .vignette{position:absolute;inset:0;background:radial-gradient(ellipse at center,transparent 50%,rgba(0,0,0,0.5) 100%);pointer-events:none;z-index:1}
 
 .text-section{background:var(--black);flex-direction:column}
 .text-section .text-content{opacity:0;transform:translateY(30px);transition:opacity 1.2s ease,transform 1.2s ease}
@@ -68,7 +65,6 @@ body{font-family:'Inter',sans-serif;background:var(--black);color:#fff;cursor:no
 @keyframes scrollPulse{0%,100%{opacity:0.3;transform:scaleY(0.7)}50%{opacity:1;transform:scaleY(1)}}
 .scroll-indicator.hidden{opacity:0!important;transition:opacity .5s ease}
 
-/* Nav dots */
 .nav-dots{position:fixed;right:1.5rem;top:50%;transform:translateY(-50%);z-index:9999;display:flex;flex-direction:column;gap:8px}
 .nav-dots .dot{width:6px;height:6px;border-radius:50%;background:rgba(201,168,76,0.2);transition:all .3s ease;cursor:pointer}
 .nav-dots .dot.active{background:var(--gold);transform:scale(1.4)}
@@ -88,64 +84,150 @@ body{font-family:'Inter',sans-serif;background:var(--black);color:#fff;cursor:no
 <p class="hero-sub">Functional art for small spaces</p>
 </section>
 
-<!-- render_05 — Hero image, cyberpunk murphy couch -->
+<!-- render_05 — cyberpunk murphy couch, red LEDs — HERO shot -->
 <section class="section img-section" data-nav>
 <div class="bg" style="background-image:url('images/render_05.png')"></div>
 <div class="vignette"></div>
 </section>
 
-<!-- TEXT -->
 <section class="section text-section" data-nav><div class="text-content"><h2>Wall art that <em>works</em>.</h2></div></section>
 
-<!-- render_01 — cognac loveseat -->
+<!-- render_01 — cognac loveseat, LED backlit frame, stone wall -->
 <section class="section img-section kb2" data-nav>
 <div class="bg" style="background-image:url('images/render_01.png')"></div>
 <div class="vignette"></div>
 </section>
 
-<!-- render_04 — neon bench pink LED -->
+<!-- render_04 — neon bench, pink LED edge, minimal -->
 <section class="section img-section kb3" data-nav>
 <div class="bg" style="background-image:url('images/render_04.png')"></div>
 <div class="vignette"></div>
 </section>
 
-<!-- TEXT -->
 <section class="section text-section" data-nav><div class="text-content"><h2>Folds flat. Holds <em>everything</em>.</h2></div></section>
 
-<!-- render_02 — red leather industrial bench -->
+<!-- render_06 — detail: tufted leather, buckle, LED strip -->
+<section class="section img-section" data-nav>
+<div class="bg" style="background-image:url('images/render_06.png')"></div>
+<div class="vignette"></div>
+</section>
+
+<!-- render_13 — black leather chain seat, red LED, padded wall -->
+<section class="section img-section kb2" data-nav>
+<div class="bg" style="background-image:url('images/render_13.png')"></div>
+<div class="vignette"></div>
+</section>
+
+<!-- render_07 — cognac seat, illuminated palm art panel -->
+<section class="section img-section kb3" data-nav>
+<div class="bg" style="background-image:url('images/render_07.png')"></div>
+<div class="vignette"></div>
+</section>
+
+<section class="section text-section" data-nav><div class="text-content"><h2>Built from Home Depot.<br>Looks like it cost <em>ten thousand</em>.</h2></div></section>
+
+<!-- render_02 — red leather industrial bench, chains, gymnast rings -->
 <section class="section img-section" data-nav>
 <div class="bg" style="background-image:url('images/render_02.png')"></div>
 <div class="vignette"></div>
 </section>
 
-<!-- render_03 — same style different angle -->
+<!-- render_03 — same style, variant angle -->
 <section class="section img-section kb2" data-nav>
 <div class="bg" style="background-image:url('images/render_03.png')"></div>
 <div class="vignette"></div>
 </section>
 
-<!-- TEXT -->
-<section class="section text-section" data-nav><div class="text-content"><h2>Built from Home Depot.<br>Looks like it cost <em>ten thousand</em>.</h2></div></section>
-
-<!-- render_06 — detail shot -->
+<!-- render_12 — red tufted leather, expanded mesh, chain mount -->
 <section class="section img-section kb3" data-nav>
-<div class="bg" style="background-image:url('images/render_06.png')"></div>
+<div class="bg" style="background-image:url('images/render_12.png')"></div>
 <div class="vignette"></div>
 </section>
 
-<!-- render_07 — cognac seat with art panel -->
+<section class="section text-section" data-nav><div class="text-content"><h2>Your space. Your <em>rules</em>.</h2></div></section>
+
+<!-- render_11 — wood frame, tufted leather, LED backlit panel -->
 <section class="section img-section" data-nav>
-<div class="bg" style="background-image:url('images/render_07.png')"></div>
+<div class="bg" style="background-image:url('images/render_11.png')"></div>
 <div class="vignette"></div>
 </section>
 
-<!-- TEXT -->
+<!-- render_08 — chain-suspended bench, pink LED wood frame -->
+<section class="section img-section kb2" data-nav>
+<div class="bg" style="background-image:url('images/render_08.png')"></div>
+<div class="vignette"></div>
+</section>
+
+<!-- render_14 — wood frame chain seat, pink backlight -->
+<section class="section img-section kb3" data-nav>
+<div class="bg" style="background-image:url('images/render_14.png')"></div>
+<div class="vignette"></div>
+</section>
+
 <section class="section text-section" data-nav><div class="text-content"><h2>Every piece hides <em>in plain sight</em>.</h2></div></section>
+
+<!-- render_15 — minimal purple fold-down, bathroom context -->
+<section class="section img-section" data-nav>
+<div class="bg" style="background-image:url('images/render_15.png')"></div>
+<div class="vignette"></div>
+</section>
+
+<!-- render_09 — wood seat with nameplate, chain, pink LED -->
+<section class="section img-section kb2" data-nav>
+<div class="bg" style="background-image:url('images/render_09.png')"></div>
+<div class="vignette"></div>
+</section>
+
+<!-- render_10 — tufted leather niche, chain, pink LED -->
+<section class="section img-section kb3" data-nav>
+<div class="bg" style="background-image:url('images/render_10.png')"></div>
+<div class="vignette"></div>
+</section>
+
+<section class="section text-section" data-nav><div class="text-content"><h2>Designed to disappear.<br>Built to <em>perform</em>.</h2></div></section>
+
+<!-- render_16 — wood frame, pink LED waterfall backlight -->
+<section class="section img-section" data-nav>
+<div class="bg" style="background-image:url('images/render_16.png')"></div>
+<div class="vignette"></div>
+</section>
+
+<!-- render_17 — suspended bench, warm LED, pine frame -->
+<section class="section img-section kb2" data-nav>
+<div class="bg" style="background-image:url('images/render_17.png')"></div>
+<div class="vignette"></div>
+</section>
+
+<!-- render_19 — dark oak, pulleys, pink LED, tufted leather -->
+<section class="section img-section kb3" data-nav>
+<div class="bg" style="background-image:url('images/render_19.png')"></div>
+<div class="vignette"></div>
+</section>
+
+<!-- render_20 — chain-suspended, pink backlight, clean -->
+<section class="section img-section" data-nav>
+<div class="bg" style="background-image:url('images/render_20.png')"></div>
+<div class="vignette"></div>
+</section>
+
+<!-- render_21 — wood frame chain seat, warm backlight -->
+<section class="section img-section kb2" data-nav>
+<div class="bg" style="background-image:url('images/render_21.png')"></div>
+<div class="vignette"></div>
+</section>
+
+<!-- render_22 — pine frame, pink backlight, corner mount -->
+<section class="section img-section kb3" data-nav>
+<div class="bg" style="background-image:url('images/render_22.png')"></div>
+<div class="vignette"></div>
+</section>
+
+<section class="section text-section" data-nav><div class="text-content"><h2>Ready to <em>build</em>?</h2></div></section>
 
 <!-- CTA -->
 <section class="section cta-section" data-nav>
 <div class="text-content">
-<h2>Ready to build?</h2>
+<h2>Let's make something.</h2>
 <a href="mailto:tonicthoughtstudios@gmail.com" class="cta-btn">Get in touch</a>
 </div>
 </section>
@@ -154,6 +236,7 @@ body{font-family:'Inter',sans-serif;background:var(--black);color:#fff;cursor:no
 <section class="section img-section" data-slot="extra1" data-nav><div class="bg empty"></div><div class="upload-hint"><span>drop image</span></div><input type="file" accept="image/*"></section>
 <section class="section img-section" data-slot="extra2" data-nav><div class="bg empty"></div><div class="upload-hint"><span>drop image</span></div><input type="file" accept="image/*"></section>
 <section class="section img-section" data-slot="extra3" data-nav><div class="bg empty"></div><div class="upload-hint"><span>drop image</span></div><input type="file" accept="image/*"></section>
+<section class="section img-section" data-slot="extra4" data-nav><div class="bg empty"></div><div class="upload-hint"><span>drop image</span></div><input type="file" accept="image/*"></section>
 
 <script>
 // Cursor
@@ -178,7 +261,7 @@ const obs=new IntersectionObserver(entries=>{entries.forEach(e=>{e.target.classL
 document.querySelectorAll('.img-section,.text-section,.cta-section,.hero').forEach(s=>obs.observe(s));
 
 // Upload for extra slots
-const KEY='dungeonbuilds_images_v4';
+const KEY='dungeonbuilds_images_v5';
 let store={};
 try{store=JSON.parse(localStorage.getItem(KEY))||{}}catch(e){}
 function loadSlot(slot,dataUrl){const sec=document.querySelector(`[data-slot="${slot}"]`);if(!sec)return;const bg=sec.querySelector('.bg');bg.style.backgroundImage=`url(${dataUrl})`;bg.classList.remove('empty');bg.classList.add('has-image')}
