@@ -2,291 +2,167 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
-<title>Dungeon Builds</title>
+<meta name="viewport" content="width=device-width,initial-scale=1.0,viewport-fit=cover">
+<title>DUNGEON BUILDS</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
-<link href="https://fonts.googleapis.com/css2?family=Inter:wght@200;300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@100;200;300;400;700;900&display=swap" rel="stylesheet">
 <style>
-*{margin:0;padding:0;box-sizing:border-box}
-:root{--gold:#c9a84c;--gold-dim:rgba(201,168,76,.15);--t:0.6s cubic-bezier(.4,0,.2,1)}
-html,body{height:100%;overflow:hidden;background:#000;color:#fff;font-family:'Inter',sans-serif;-webkit-tap-highlight-color:transparent}
+*,*::before,*::after{margin:0;padding:0;box-sizing:border-box}
+:root{--gold:#c9a84c;--gold-light:#e8d5a0;--black:#0a0a0a;--grain-opacity:0.035}
+html{scroll-snap-type:y mandatory;overflow-x:hidden;scrollbar-width:none}
+html::-webkit-scrollbar{display:none}
+body{font-family:'Inter',sans-serif;background:var(--black);color:#fff;cursor:none;overflow-x:hidden}
+
+/* Custom cursor */
+.cursor{position:fixed;width:20px;height:20px;border:1px solid var(--gold);border-radius:50%;pointer-events:none;z-index:10000;transition:transform .15s ease,opacity .15s ease;mix-blend-mode:difference;transform:translate(-50%,-50%)}
+.cursor-dot{position:fixed;width:4px;height:4px;background:var(--gold);border-radius:50%;pointer-events:none;z-index:10001;transform:translate(-50%,-50%);transition:transform .05s ease}
+.cursor.hover{transform:translate(-50%,-50%) scale(2.5);border-color:var(--gold-light)}
+@media(hover:none){.cursor,.cursor-dot{display:none}body{cursor:auto}}
 
 /* Grain overlay */
-body::after{content:'';position:fixed;inset:0;pointer-events:none;z-index:9999;opacity:.035;background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E")}
+.grain{position:fixed;top:-50%;left:-50%;width:200%;height:200%;z-index:9998;pointer-events:none;opacity:var(--grain-opacity);background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");animation:grainMove 0.5s steps(1) infinite}
+@keyframes grainMove{0%{transform:translate(0,0)}25%{transform:translate(-5%,5%)}50%{transform:translate(5%,-5%)}75%{transform:translate(-5%,-5%)}100%{transform:translate(5%,5%)}}
 
-/* Slides */
-.deck{position:relative;width:100%;height:100%}
-.slide{position:absolute;inset:0;display:flex;flex-direction:column;justify-content:center;align-items:center;padding:40px 24px;opacity:0;pointer-events:none;transform:scale(.97);transition:opacity var(--t),transform var(--t);overflow:hidden}
-.slide.active{opacity:1;pointer-events:all;transform:scale(1)}
+/* Sections */
+.section{height:100vh;height:100dvh;width:100vw;scroll-snap-align:start;scroll-snap-stop:always;position:relative;overflow:hidden;display:flex;align-items:center;justify-content:center}
 
-/* Nav dots */
-.dots{position:fixed;bottom:24px;left:50%;transform:translateX(-50%);display:flex;gap:10px;z-index:100}
-.dot{width:10px;height:10px;border-radius:50%;background:#333;cursor:pointer;transition:all .3s;border:none;padding:0}
-.dot.active{background:var(--gold);transform:scale(1.2)}
-.dot:hover{background:#666}
+/* Hero */
+.hero{background:var(--black);flex-direction:column;gap:0}
+.hero-title{font-weight:900;font-size:clamp(3rem,10vw,8rem);letter-spacing:0.15em;color:var(--gold);opacity:0;animation:fadeInSlow 3s ease forwards;text-transform:uppercase;text-align:center;line-height:1}
+.hero-sub{font-weight:100;font-size:clamp(0.7rem,1.5vw,1rem);letter-spacing:0.5em;color:var(--gold-light);opacity:0;animation:fadeInSlow 2s 2s ease forwards;text-transform:uppercase;margin-top:1.5rem}
+@keyframes fadeInSlow{to{opacity:1}}
 
-/* ===== SLIDE 1: COVER ===== */
-.cover-title{font-size:clamp(3rem,12vw,8rem);font-weight:900;letter-spacing:-.03em;color:var(--gold);line-height:.9}
-.cover-tag{font-size:clamp(.85rem,2.5vw,1.1rem);font-weight:200;letter-spacing:.4em;text-transform:uppercase;color:#555;margin-top:24px}
+/* Image sections */
+.img-section{background:var(--black)}
+.img-section .bg{position:absolute;inset:0;background-size:cover;background-position:center;transition:transform 8s cubic-bezier(.19,1,.22,1);will-change:transform}
+.img-section.in-view .bg{transform:scale(1.05)}
+.img-section .bg.empty{background:linear-gradient(145deg,#0d0d0d 0%,#1a1a1a 50%,#0d0d0d 100%)}
+.img-section .upload-hint{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;opacity:0;transition:opacity .4s ease;z-index:2}
+.img-section:hover .upload-hint,.img-section.dragging .upload-hint{opacity:1}
+.upload-hint span{font-weight:100;font-size:0.75rem;letter-spacing:0.4em;color:rgba(201,168,76,0.4);text-transform:uppercase;pointer-events:none}
+.img-section .bg.has-image .upload-hint{display:none}
+.img-section input[type="file"]{position:absolute;inset:0;opacity:0;cursor:pointer;z-index:3;width:100%;height:100%}
 
-/* ===== SLIDE 2: PROBLEM ===== */
-.problem-text{font-size:clamp(1.5rem,5vw,3.2rem);font-weight:800;line-height:1.15;text-align:center;max-width:900px;color:#fff}
-.problem-text em{font-style:normal;color:var(--gold)}
+/* Text interstitials */
+.text-section{background:var(--black);flex-direction:column}
+.text-section .text-content{opacity:0;transform:translateY(30px);transition:opacity 1.2s ease,transform 1.2s ease}
+.text-section.in-view .text-content{opacity:1;transform:translateY(0)}
+.text-content h2{font-weight:100;font-size:clamp(1.3rem,4vw,3rem);letter-spacing:0.05em;color:#fff;text-align:center;line-height:1.3;max-width:80vw}
+.text-content h2 em{font-style:normal;color:var(--gold)}
 
-/* ===== SLIDE 3: SOLUTION ===== */
-.solution-label{font-size:clamp(.7rem,1.5vw,.85rem);font-weight:600;letter-spacing:.3em;text-transform:uppercase;color:var(--gold);margin-bottom:16px}
-.solution-text{font-size:clamp(1.2rem,3.5vw,2rem);font-weight:300;text-align:center;max-width:700px;color:#ccc;line-height:1.5}
-.solution-hero{margin-top:40px;font-size:clamp(1rem,2vw,1.2rem);color:#555;font-weight:400}
+/* CTA */
+.cta-section{background:var(--black);flex-direction:column;gap:2rem}
+.cta-section .text-content{opacity:0;transform:translateY(30px);transition:opacity 1.2s ease,transform 1.2s ease}
+.cta-section.in-view .text-content{opacity:1;transform:translateY(0)}
+.cta-section h2{font-weight:200;font-size:clamp(1.8rem,5vw,4rem);letter-spacing:0.08em;color:#fff;text-align:center}
+.cta-btn{display:inline-block;margin-top:2rem;padding:1rem 3rem;border:1px solid var(--gold);color:var(--gold);font-family:'Inter',sans-serif;font-weight:300;font-size:0.85rem;letter-spacing:0.3em;text-transform:uppercase;text-decoration:none;transition:all .4s ease;background:transparent}
+.cta-btn:hover{background:var(--gold);color:var(--black)}
 
-/* ===== SLIDE 4: PRODUCTS CAROUSEL ===== */
-.carousel-wrap{width:100%;max-width:100vw;overflow:visible;position:relative;flex:1;display:flex;flex-direction:column;justify-content:center}
-.carousel{display:flex;gap:20px;overflow-x:auto;scroll-snap-type:x mandatory;-webkit-overflow-scrolling:touch;padding:0 calc(50vw - 150px);scrollbar-width:none}
-.carousel::-webkit-scrollbar{display:none}
-.product-card{flex:0 0 280px;scroll-snap-align:center;background:#111;border:1px solid #222;border-radius:16px;padding:28px 24px;cursor:pointer;transition:all .3s;display:flex;flex-direction:column;gap:12px}
-.product-card:hover{border-color:var(--gold);transform:translateY(-4px)}
-.product-card h3{font-size:1.15rem;font-weight:700;color:#fff}
-.product-card p{font-size:.85rem;font-weight:300;color:#777;line-height:1.5;flex:1}
-.product-card .card-price{font-size:1.5rem;font-weight:800;color:var(--gold)}
-.products-title{font-size:clamp(.7rem,1.5vw,.85rem);font-weight:600;letter-spacing:.3em;text-transform:uppercase;color:var(--gold);margin-bottom:24px;text-align:center}
-.carousel-hint{font-size:.7rem;color:#444;text-align:center;margin-top:16px;letter-spacing:.15em;text-transform:uppercase}
+/* Scroll progress */
+.progress{position:fixed;top:0;left:0;height:2px;background:var(--gold);z-index:9999;transition:width .1s linear;width:0}
 
-/* ===== PRODUCT DETAIL MODAL ===== */
-.modal-overlay{position:fixed;inset:0;background:rgba(0,0,0,.92);z-index:200;opacity:0;pointer-events:none;transition:opacity .3s;display:flex;align-items:center;justify-content:center;padding:20px}
-.modal-overlay.open{opacity:1;pointer-events:all}
-.modal{background:#0a0a0a;border:1px solid #222;border-radius:20px;max-width:500px;width:100%;max-height:90vh;overflow-y:auto;padding:32px;transform:translateY(30px);transition:transform .4s cubic-bezier(.4,0,.2,1);scrollbar-width:thin;scrollbar-color:#333 transparent}
-.modal-overlay.open .modal{transform:translateY(0)}
-.modal-close{position:absolute;top:16px;right:20px;background:none;border:none;color:#555;font-size:1.5rem;cursor:pointer;z-index:1;padding:8px}
-.modal h2{font-size:1.6rem;font-weight:800;color:#fff;margin-bottom:4px}
-.modal .modal-price{font-size:1.8rem;font-weight:800;color:var(--gold);margin:12px 0}
-.modal .modal-desc{font-size:.9rem;color:#888;line-height:1.7;margin-bottom:20px}
-.modal .features{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:20px}
-.modal .feat{background:var(--gold-dim);color:var(--gold);padding:6px 14px;border-radius:20px;font-size:.7rem;font-weight:600;letter-spacing:.05em;text-transform:uppercase}
-.modal .materials{background:#111;border-radius:12px;padding:16px;font-size:.78rem;color:#666;line-height:1.9;margin-bottom:20px}
-.modal .materials strong{color:var(--gold);font-weight:600;display:block;margin-bottom:8px;font-size:.75rem;letter-spacing:.1em;text-transform:uppercase}
-.modal .build-time{font-size:.8rem;color:#555}
-
-/* Image placeholder in modal */
-.img-drop{width:100%;aspect-ratio:4/3;background:#111;border:2px dashed #333;border-radius:12px;display:flex;flex-direction:column;align-items:center;justify-content:center;cursor:pointer;transition:border-color .3s;margin-bottom:20px;position:relative;overflow:hidden}
-.img-drop:hover{border-color:var(--gold)}
-.img-drop .drop-label{font-size:.7rem;color:#444;letter-spacing:.15em;text-transform:uppercase}
-.img-drop .drop-icon{font-size:2rem;color:#333;margin-bottom:8px}
-.img-drop img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;border-radius:10px}
-.img-drop.has-img .drop-label,.img-drop.has-img .drop-icon{display:none}
-
-/* ===== SLIDE 6: NUMBERS ===== */
-.numbers-grid{display:flex;gap:clamp(24px,6vw,80px);text-align:center;flex-wrap:wrap;justify-content:center}
-.num-block .num{font-size:clamp(2.5rem,8vw,5rem);font-weight:900;color:var(--gold);line-height:1}
-.num-block .num-label{font-size:clamp(.65rem,1.2vw,.8rem);color:#555;letter-spacing:.2em;text-transform:uppercase;margin-top:8px}
-.numbers-sub{font-size:clamp(.75rem,1.5vw,.95rem);color:#444;margin-top:40px;text-align:center}
-
-/* ===== SLIDE 7: DIY ===== */
-.diy-text{font-size:clamp(1.4rem,5vw,3rem);font-weight:800;text-align:center;line-height:1.2;max-width:700px}
-.diy-sub{font-size:clamp(.9rem,2vw,1.1rem);color:#555;margin-top:20px;font-weight:300}
-
-/* ===== SLIDE 8: NEXT STEPS ===== */
-.next-label{font-size:clamp(.7rem,1.5vw,.85rem);font-weight:600;letter-spacing:.3em;text-transform:uppercase;color:var(--gold);margin-bottom:20px}
-.next-text{font-size:clamp(1.1rem,3vw,1.6rem);font-weight:300;color:#999;text-align:center;max-width:600px;line-height:1.6;margin-bottom:40px}
-.next-cta{font-size:clamp(1.5rem,4vw,2.5rem);font-weight:800;color:#fff}
-.next-timeline{font-size:.85rem;color:#555;margin-top:32px;text-align:center;line-height:1.8}
-
-@media(max-width:600px){
-  .product-card{flex:0 0 240px}
-  .carousel{padding:0 calc(50vw - 120px)}
-  .modal{padding:24px;border-radius:16px}
-}
+/* Scroll indicator */
+.scroll-indicator{position:fixed;bottom:2rem;left:50%;transform:translateX(-50%);z-index:9999;opacity:0;animation:fadeInSlow 2s 4s ease forwards}
+.scroll-indicator span{display:block;width:1px;height:40px;background:linear-gradient(to bottom,transparent,var(--gold));animation:scrollPulse 2s ease infinite}
+@keyframes scrollPulse{0%,100%{opacity:0.3;transform:scaleY(0.7)}50%{opacity:1;transform:scaleY(1)}}
+.scroll-indicator.hidden{opacity:0!important;transition:opacity .5s ease}
 </style>
 </head>
 <body>
-<div class="deck" id="deck">
+<div class="cursor" id="cursor"></div>
+<div class="cursor-dot" id="cursorDot"></div>
+<div class="grain"></div>
+<div class="progress" id="progress"></div>
 
-<!-- 1: COVER -->
-<div class="slide active" data-slide="0">
-  <div class="cover-title">DUNGEON<br>BUILDS</div>
-  <div class="cover-tag">Premium Functional Furniture</div>
+<div class="scroll-indicator" id="scrollInd"><span></span></div>
+
+<!-- HERO -->
+<section class="section hero">
+<h1 class="hero-title">Dungeon Builds</h1>
+<p class="hero-sub">Functional art for small spaces</p>
+</section>
+
+<!-- IMAGES 1-3 -->
+<section class="section img-section" data-slot="1"><div class="bg empty"></div><div class="upload-hint"><span>drop image</span></div><input type="file" accept="image/*"></section>
+<section class="section img-section" data-slot="2"><div class="bg empty"></div><div class="upload-hint"><span>drop image</span></div><input type="file" accept="image/*"></section>
+<section class="section img-section" data-slot="3"><div class="bg empty"></div><div class="upload-hint"><span>drop image</span></div><input type="file" accept="image/*"></section>
+
+<!-- TEXT 1 -->
+<section class="section text-section"><div class="text-content"><h2>Wall art that <em>works</em>.</h2></div></section>
+
+<!-- IMAGES 4-6 -->
+<section class="section img-section" data-slot="4"><div class="bg empty"></div><div class="upload-hint"><span>drop image</span></div><input type="file" accept="image/*"></section>
+<section class="section img-section" data-slot="5"><div class="bg empty"></div><div class="upload-hint"><span>drop image</span></div><input type="file" accept="image/*"></section>
+<section class="section img-section" data-slot="6"><div class="bg empty"></div><div class="upload-hint"><span>drop image</span></div><input type="file" accept="image/*"></section>
+
+<!-- TEXT 2 -->
+<section class="section text-section"><div class="text-content"><h2>Folds flat. Holds <em>everything</em>.</h2></div></section>
+
+<!-- IMAGES 7-9 -->
+<section class="section img-section" data-slot="7"><div class="bg empty"></div><div class="upload-hint"><span>drop image</span></div><input type="file" accept="image/*"></section>
+<section class="section img-section" data-slot="8"><div class="bg empty"></div><div class="upload-hint"><span>drop image</span></div><input type="file" accept="image/*"></section>
+<section class="section img-section" data-slot="9"><div class="bg empty"></div><div class="upload-hint"><span>drop image</span></div><input type="file" accept="image/*"></section>
+
+<!-- TEXT 3 -->
+<section class="section text-section"><div class="text-content"><h2>Built from Home Depot.<br>Looks like it cost <em>ten thousand</em>.</h2></div></section>
+
+<!-- IMAGES 10-12 -->
+<section class="section img-section" data-slot="10"><div class="bg empty"></div><div class="upload-hint"><span>drop image</span></div><input type="file" accept="image/*"></section>
+<section class="section img-section" data-slot="11"><div class="bg empty"></div><div class="upload-hint"><span>drop image</span></div><input type="file" accept="image/*"></section>
+<section class="section img-section" data-slot="12"><div class="bg empty"></div><div class="upload-hint"><span>drop image</span></div><input type="file" accept="image/*"></section>
+
+<!-- TEXT 4 -->
+<section class="section text-section"><div class="text-content"><h2>Every piece hides <em>in plain sight</em>.</h2></div></section>
+
+<!-- IMAGES 13-15 -->
+<section class="section img-section" data-slot="13"><div class="bg empty"></div><div class="upload-hint"><span>drop image</span></div><input type="file" accept="image/*"></section>
+<section class="section img-section" data-slot="14"><div class="bg empty"></div><div class="upload-hint"><span>drop image</span></div><input type="file" accept="image/*"></section>
+<section class="section img-section" data-slot="15"><div class="bg empty"></div><div class="upload-hint"><span>drop image</span></div><input type="file" accept="image/*"></section>
+
+<!-- CTA -->
+<section class="section cta-section">
+<div class="text-content">
+<h2>Ready to build?</h2>
+<a href="mailto:tonicthoughtstudios@gmail.com" class="cta-btn">Get in touch</a>
 </div>
-
-<!-- 2: PROBLEM -->
-<div class="slide" data-slide="1">
-  <p class="problem-text">Your play room deserves better than <em>Amazon junk.</em></p>
-</div>
-
-<!-- 3: SOLUTION -->
-<div class="slide" data-slide="2">
-  <div class="solution-label">The Solution</div>
-  <p class="solution-text">Wall-mounted, space-efficient furniture that transforms from art piece to fully functional — in seconds.</p>
-  <p class="solution-hero">Flagship: The Atlas Fold — wall-mounted folding seat, 4" profile, 500 lb rated</p>
-</div>
-
-<!-- 4: PRODUCTS -->
-<div class="slide" data-slide="3">
-  <div class="products-title">The Collection</div>
-  <div class="carousel-wrap">
-    <div class="carousel" id="carousel"></div>
-  </div>
-  <div class="carousel-hint">Swipe to explore · Tap for details</div>
-</div>
-
-<!-- 5: NUMBERS -->
-<div class="slide" data-slide="4">
-  <div class="numbers-grid">
-    <div class="num-block"><div class="num">$300</div><div class="num-label">Avg Material Cost</div></div>
-    <div class="num-block"><div class="num">$1,765</div><div class="num-label">Avg Retail Price</div></div>
-    <div class="num-block"><div class="num">~53%</div><div class="num-label">Gross Margin</div></div>
-  </div>
-  <p class="numbers-sub">4–5× markup · All Home Depot materials · Premium positioning</p>
-</div>
-
-<!-- 6: DIY -->
-<div class="slide" data-slide="5">
-  <p class="diy-text">Everything from Home Depot.<br>One weekend build.</p>
-  <p class="diy-sub">No machine shop. No exotic suppliers. No 12-week lead times.</p>
-</div>
-
-<!-- 7: NEXT STEPS -->
-<div class="slide" data-slide="6">
-  <div class="next-label">Next Steps</div>
-  <p class="next-text">Three prototypes. Three months.<br>Proof of concept by May 2026.</p>
-  <div class="next-cta">Let's build something<br>nobody else will.</div>
-  <div class="next-timeline">
-    March → Meridian Bench prototype<br>
-    April → Aura Grid + Harness Rack<br>
-    May → Instagram launch · First sales
-  </div>
-</div>
-
-</div><!-- /deck -->
-
-<!-- Nav dots -->
-<div class="dots" id="dots"></div>
-
-<!-- Product detail modal -->
-<div class="modal-overlay" id="modal">
-  <div class="modal" id="modalContent"></div>
-</div>
+</section>
 
 <script>
-const products = [
-  {name:"Meridian Bench",desc:"Wall-mounted folding bench with interlocking wood slats and padded leather panels. Deploys from a flat wall profile into a fully rated horizontal surface.",price:"$1,495",features:["Wall-Mounted","Folds Flat","500 lb Rating","Gas-Assist"],materials:"¾\" birch plywood (2 sheets) — $65\n1\" steel square tube (20ft) — $48\nHeavy-duty gate hinges ×4 — $36\nGas struts ×2 — $24\nFrench cleat hardware — $18\nVinyl upholstery foam + fabric — $55\nHardware, bolts, finish — $39",matCost:"$285",time:"8–10 hours",tag:"Folding wall bench · Leather & wood"},
-  {name:"Sovereign Chair",desc:"Black leather posture chair with architectural wooden slat framework. Adjustable restraint-compatible hardpoints concealed within the slatted design.",price:"$1,895",features:["Posture Design","Hidden Hardpoints","Wall Anchor","400 lb Rating"],materials:"¾\" oak plywood (2 sheets) — $78\n1\"×2\" poplar boards (slats) — $45\n1\" steel square tube (16ft) — $38\nCarriage bolts + T-nuts — $22\nWood stain (ebony) — $14\nVinyl upholstery + foam — $85\nHardware, brackets — $58",matCost:"$340",time:"12–14 hours",tag:"Architectural posture chair"},
-  {name:"Harness Rack",desc:"Wall-mounted leather and iron display/storage system with integrated buckle straps and attachment rings. Doubles as striking wall art.",price:"$1,295",features:["Modular","Iron Strap Detail","Storage","Art Piece"],materials:"¾\" MDF panel — $28\n1\" flat steel bar (12ft) — $32\nHeavy D-rings ×8 — $24\nLeather/vinyl strips — $45\nBuckle hardware ×6 — $18\nFrench cleat + wall anchors — $22\nMatte black spray + finish — $26",matCost:"$195",time:"6–8 hours",tag:"Wall-mounted display & storage"},
-  {name:"Nomad Frame",desc:"Portable black steel frame on locking casters with integrated attachment rings. Rolls into position, locks in place. Disassembles into 4 pieces.",price:"$1,695",features:["Portable","Locking Casters","Disassembles","600 lb Rating"],materials:"1.5\" steel square tube (24ft) — $72\nLocking casters ×4 — $44\nWelding rod / JB Weld — $18\nCarabiner clips ×8 — $32\nQuick-release pins ×4 — $28\nMatte black Rustoleum — $16\nRubber floor pads + hardware — $50",matCost:"$260",time:"10–12 hours",tag:"Portable steel frame on casters"},
-  {name:"Bastion Wall",desc:"Dramatic wall rack with faux stone panel backing and integrated rope storage compartments. Looks like carved granite — achieved with joint compound over MDF.",price:"$1,495",features:["Faux Stone","Rope Storage","Integrated Hooks","Statement Piece"],materials:"¾\" MDF (4×8 sheet) — $38\nJoint compound (5 gal) — $16\nTextured spray paint — $24\nHeavy-duty hooks ×6 — $30\nD-rings + eye bolts — $22\nFrench cleat system — $18\nPaint + sealant + hardware — $72",matCost:"$220",time:"14–16 hours",tag:"Faux stone wall display"},
-  {name:"Citadel Box",desc:"Wall-mounted utility box with integrated pull-up bar and multiple attachment rings. Folds open to reveal padded interior. Closed, it looks like a minimalist cabinet.",price:"$1,795",features:["Pull-Up Bar","Hidden Storage","Folds Closed","350 lb Rating"],materials:"¾\" birch plywood (2 sheets) — $65\n1.25\" steel pipe (pull-up bar) — $22\nFloor flanges ×2 — $16\nPiano hinge (48\") — $18\nCarabiners + D-rings ×6 — $28\nMagnetic catches ×4 — $12\nUpholstery foam + vinyl — $85\nHardware + French cleats — $64",matCost:"$310",time:"12–14 hours",tag:"Wall cabinet with pull-up bar"},
-  {name:"Atlas Fold",desc:"Precision-engineered folding wall seat with technical hinge system. Folds to just 4\" wall profile. Opens to a full seated/reclined position with adjustable angle stops.",price:"$1,995",features:["4\" Profile","Angle Stops","Technical Design","500 lb Rating"],materials:"¾\" Baltic birch plywood — $72\n1.5\" steel square tube (16ft) — $48\nHeavy barn door hinges ×4 — $44\nGas struts ×2 — $24\nAngle stop brackets (custom bent) — $32\nVinyl upholstery + 3\" foam — $65\nFrench cleats + lag bolts — $40",matCost:"$325",time:"14–16 hours",tag:"Flagship folding wall seat"},
-  {name:"Vault Murphy",desc:"Full Murphy bed system with integrated desk surface and shelf unit. Guest bedroom by night, play room by design. Barn door hardware for smooth operation.",price:"$2,495",features:["Murphy Bed","Built-In Desk","Dual Purpose","Barn Door Hardware"],materials:"¾\" plywood (4 sheets) — $130\nMurphy bed hardware kit — $89\nBarn door track + rollers — $65\nPiano hinges ×2 — $28\nLED strip lighting — $22\n2×4 framing lumber — $36\nVinyl upholstery + foam — $65\nHardware + finish — $45",matCost:"$480",time:"20–24 hours",tag:"Murphy bed with integrated desk"},
-  {name:"Iron Keep",desc:"Metal mesh cage enclosure with integrated padded leather bench. Welded steel frame with expanded metal mesh panels. Locking door with concealed hinge.",price:"$2,295",features:["Cage Enclosure","Locking Door","Padded Bench","Modular Panels"],materials:"1.5\" steel square tube (40ft) — $120\nExpanded metal mesh (4×8) ×3 — $96\nHeavy-duty gate hinges ×4 — $36\nHasp + padlock set — $18\nVinyl upholstery + foam — $65\nMatte black Rustoleum (6 cans) — $36\nHardware + welding supplies — $39",matCost:"$410",time:"18–22 hours",tag:"Steel mesh cage with bench"},
-  {name:"Aura Grid",desc:"LED-backlit wall grid panels with attachment points at every intersection. Bluetooth-controlled RGB LED strips. Daisy-chain multiple panels for full wall coverage.",price:"$1,195",features:["LED Backlit","Bluetooth RGB","Modular Grid","Daisy-Chain"],materials:"1\" steel square tube (24ft) — $58\nLED strip lights (RGB, 32ft) — $28\nBluetooth LED controller — $15\nEye bolts ×16 — $24\nMatte black spray paint — $12\nFrench cleats + wall anchors — $18\nWire management + power — $20",matCost:"$175",time:"6–8 hours",tag:"LED-backlit mounting grid"}
-];
+// Cursor
+const cur=document.getElementById('cursor'),dot=document.getElementById('cursorDot');
+let mx=0,my=0,cx=0,cy=0;
+document.addEventListener('mousemove',e=>{mx=e.clientX;my=e.clientY;dot.style.left=mx+'px';dot.style.top=my+'px'});
+(function loop(){cx+=(mx-cx)*.12;cy+=(my-cy)*.12;cur.style.left=cx+'px';cur.style.top=cy+'px';requestAnimationFrame(loop)})();
+document.querySelectorAll('a,.cta-btn,input[type="file"]').forEach(el=>{el.addEventListener('mouseenter',()=>cur.classList.add('hover'));el.addEventListener('mouseleave',()=>cur.classList.remove('hover'))});
 
-// Build carousel
-const carousel = document.getElementById('carousel');
-products.forEach((p,i) => {
-  const card = document.createElement('div');
-  card.className = 'product-card';
-  card.innerHTML = `<h3>${p.name}</h3><p>${p.tag}</p><div class="card-price">${p.price}</div>`;
-  card.onclick = () => openModal(i);
-  carousel.appendChild(card);
-});
+// Scroll progress
+const prog=document.getElementById('progress'),scrollInd=document.getElementById('scrollInd');
+window.addEventListener('scroll',()=>{const s=document.documentElement,p=s.scrollTop/(s.scrollHeight-s.clientHeight)*100;prog.style.width=p+'%';if(s.scrollTop>100)scrollInd.classList.add('hidden')},{passive:true});
 
-// Modal
-const overlay = document.getElementById('modal');
-const modalContent = document.getElementById('modalContent');
+// IntersectionObserver for fade-ins + parallax
+const obs=new IntersectionObserver(entries=>{entries.forEach(e=>{e.target.classList.toggle('in-view',e.isIntersecting)})},{threshold:0.15});
+document.querySelectorAll('.img-section,.text-section,.cta-section').forEach(s=>obs.observe(s));
 
-function openModal(i) {
-  const p = products[i];
-  const key = 'db-img-' + p.name.toLowerCase().replace(/\s/g,'-');
-  const saved = localStorage.getItem(key);
-  modalContent.innerHTML = `
-    <button class="modal-close" onclick="closeModal()">×</button>
-    <div class="img-drop ${saved?'has-img':''}" id="imgDrop" data-key="${key}">
-      ${saved?`<img src="${saved}">`:'<div class="drop-icon">◇</div><div class="drop-label">Tap to add image</div>'}
-    </div>
-    <h2>${p.name}</h2>
-    <div class="modal-price">${p.price}</div>
-    <p class="modal-desc">${p.desc}</p>
-    <div class="features">${p.features.map(f=>`<span class="feat">${f}</span>`).join('')}</div>
-    <div class="materials"><strong>Materials — Est. ${p.matCost}</strong>${p.materials.replace(/\n/g,'<br>')}</div>
-    <div class="build-time">Build time: ${p.time}</div>
-  `;
-  overlay.classList.add('open');
-  // Image upload
-  const drop = document.getElementById('imgDrop');
-  drop.onclick = () => uploadImg(drop);
-  drop.ondragover = e => { e.preventDefault(); drop.style.borderColor='var(--gold)'; };
-  drop.ondragleave = () => { drop.style.borderColor=''; };
-  drop.ondrop = e => { e.preventDefault(); drop.style.borderColor=''; handleFile(e.dataTransfer.files[0], drop); };
+// Image upload + localStorage
+const KEY='dungeonbuilds_images_v3';
+let store={};
+try{store=JSON.parse(localStorage.getItem(KEY))||{}}catch(e){}
+
+function loadSlot(slot,dataUrl){
+const sec=document.querySelector(`[data-slot="${slot}"]`);if(!sec)return;
+const bg=sec.querySelector('.bg');
+bg.style.backgroundImage=`url(${dataUrl})`;
+bg.classList.remove('empty');bg.classList.add('has-image');
 }
+Object.keys(store).forEach(k=>loadSlot(k,store[k]));
 
-function uploadImg(el) {
-  const input = document.createElement('input');
-  input.type='file'; input.accept='image/*';
-  input.onchange = e => handleFile(e.target.files[0], el);
-  input.click();
-}
-
-function handleFile(file, el) {
-  if(!file||!file.type.startsWith('image/')) return;
-  const reader = new FileReader();
-  reader.onload = ev => {
-    localStorage.setItem(el.dataset.key, ev.target.result);
-    let img = el.querySelector('img');
-    if(!img){ img = document.createElement('img'); el.appendChild(img); }
-    img.src = ev.target.result;
-    el.classList.add('has-img');
-  };
-  reader.readAsDataURL(file);
-}
-
-function closeModal(){ overlay.classList.remove('open'); }
-overlay.onclick = e => { if(e.target === overlay) closeModal(); };
-
-// Slides
-const slides = document.querySelectorAll('.slide');
-const total = slides.length;
-let current = 0;
-
-// Build dots
-const dotsEl = document.getElementById('dots');
-for(let i=0;i<total;i++){
-  const d = document.createElement('button');
-  d.className = 'dot' + (i===0?' active':'');
-  d.onclick = () => goTo(i);
-  dotsEl.appendChild(d);
-}
-
-function goTo(n){
-  if(n<0||n>=total) return;
-  slides[current].classList.remove('active');
-  dotsEl.children[current].classList.remove('active');
-  current = n;
-  slides[current].classList.add('active');
-  dotsEl.children[current].classList.add('active');
-}
-
-// Keyboard
-document.addEventListener('keydown', e => {
-  if(overlay.classList.contains('open')){ if(e.key==='Escape') closeModal(); return; }
-  if(e.key==='ArrowRight'||e.key===' '){ e.preventDefault(); goTo(current+1); }
-  if(e.key==='ArrowLeft'){ e.preventDefault(); goTo(current-1); }
-});
-
-// Touch swipe (not on carousel slide)
-let tx=0, ty=0, swiping=false;
-document.addEventListener('touchstart', e => { tx=e.touches[0].clientX; ty=e.touches[0].clientY; swiping=true; });
-document.addEventListener('touchmove', e => {
-  if(!swiping) return;
-  // If on carousel slide, let horizontal scroll work
-  if(current===3 && e.target.closest('.carousel')) swiping=false;
-});
-document.addEventListener('touchend', e => {
-  if(!swiping) return;
-  if(overlay.classList.contains('open')) return;
-  const dx = tx - e.changedTouches[0].clientX;
-  const dy = ty - e.changedTouches[0].clientY;
-  if(Math.abs(dx) > Math.abs(dy) && Math.abs(dx) > 50){
-    dx > 0 ? goTo(current+1) : goTo(current-1);
-  }
-  swiping = false;
+document.querySelectorAll('.img-section').forEach(sec=>{
+const slot=sec.dataset.slot,input=sec.querySelector('input[type="file"]');
+const handle=file=>{if(!file||!file.type.startsWith('image/'))return;const r=new FileReader();r.onload=e=>{store[slot]=e.target.result;try{localStorage.setItem(KEY,JSON.stringify(store))}catch(ex){/* quota */}loadSlot(slot,e.target.result)};r.readAsDataURL(file)};
+input.addEventListener('change',e=>{handle(e.target.files[0])});
+sec.addEventListener('dragover',e=>{e.preventDefault();sec.classList.add('dragging')});
+sec.addEventListener('dragleave',()=>sec.classList.remove('dragging'));
+sec.addEventListener('drop',e=>{e.preventDefault();sec.classList.remove('dragging');handle(e.dataTransfer.files[0])});
 });
 </script>
 </body>
